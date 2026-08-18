@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Inspecciones</title>
+<title>Check List de Inspección de Seguridad</title>
 
 <style>
     * {
@@ -164,35 +164,52 @@
 <div class="app">
 
 <header>
-    <h1>INSPECCIÓN</h1>
+    <h1>Check List de Inspección de Seguridad</h1>
 </header>
 
 <div class="contenido">
 
     <!-- PANTALLA INICIAL -->
 
-    <section id="pantallaInicio">
+   <section id="pantallaInicio">
 
-        <h2>Nueva inspección</h2>
+    <h2>Nueva inspección</h2>
 
-        <label>Fecha de inspección</label>
-        <input type="date" id="fechaInspeccion">
+    <label>Fecha de inspección</label>
+    <input type="date" id="fechaInspeccion">
 
-        <label>Bodega</label>
-        <input
-            type="text"
-            id="bodega"
-            placeholder="Ingrese la bodega"
-        >
+    <label>Hora de inspección</label>
+    <input type="time" id="horaInspeccion">
 
-        <button
-            class="btn-principal"
-            onclick="iniciarInspeccion()"
-        >
-            INICIAR INSPECCIÓN
-        </button>
+    <label>Bodega</label>
+    <input
+        type="text"
+        id="bodega"
+        placeholder="Ingrese la bodega"
+    >
 
-    </section>
+    <label>Nombre del inspector</label>
+    <input
+        type="text"
+        id="inspector"
+        placeholder="Ingrese el nombre del inspector"
+    >
+
+    <label>Nombre del regente o encargado del área</label>
+    <input
+        type="text"
+        id="regente"
+        placeholder="Ingrese el nombre del regente o encargado"
+    >
+
+    <button
+        class="btn-principal"
+        onclick="iniciarInspeccion()"
+    >
+        INICIAR INSPECCIÓN
+    </button>
+
+</section>
 
 
     <!-- PANTALLA DE PARÁMETROS -->
@@ -394,7 +411,10 @@ let indiceParametro = 0;
 let inspeccion = {
 
     fecha: "",
+    hora: "",
     bodega: "",
+    inspector: "",
+    regente: "",
 
     resultados: [],
 
@@ -402,48 +422,94 @@ let inspeccion = {
 
 };
 
-
 let estadoActual = null;
 
 
 // FECHA AUTOMÁTICA
 
+const ahora = new Date();
+
 document.getElementById("fechaInspeccion").value =
-    new Date().toISOString().split("T")[0];
+    ahora.toISOString().split("T")[0];
+
+document.getElementById("horaInspeccion").value =
+    ahora.toTimeString().slice(0, 5);
 
 
 // INICIAR
 
 function iniciarInspeccion() {
 
-    const fecha =
-        document.getElementById("fechaInspeccion").value;
+const fecha =
+    document.getElementById("fechaInspeccion").value;
 
-    const bodega =
-        document.getElementById("bodega").value.trim();
+const hora =
+    document.getElementById("horaInspeccion").value;
 
+const bodega =
+    document.getElementById("bodega").value.trim();
 
-    if (!fecha) {
+const inspector =
+    document.getElementById("inspector").value.trim();
 
-        alert("Ingrese la fecha de inspección.");
-
-        return;
-
-    }
-
-
-    if (!bodega) {
-
-        alert("Ingrese la bodega.");
-
-        return;
-
-    }
+const regente =
+    document.getElementById("regente").value.trim();
 
 
-    inspeccion.fecha = fecha;
+if (!fecha) {
 
-    inspeccion.bodega = bodega;
+    alert("Ingrese la fecha de inspección.");
+
+    return;
+
+}
+
+
+if (!hora) {
+
+    alert("Ingrese la hora de inspección.");
+
+    return;
+
+}
+
+
+if (!bodega) {
+
+    alert("Ingrese la bodega.");
+
+    return;
+
+}
+
+
+if (!inspector) {
+
+    alert("Ingrese el nombre del inspector.");
+
+    return;
+
+}
+
+
+if (!regente) {
+
+    alert("Ingrese el nombre del regente o encargado del área.");
+
+    return;
+
+}
+
+
+inspeccion.fecha = fecha;
+
+inspeccion.hora = hora;
+
+inspeccion.bodega = bodega;
+
+inspeccion.inspector = inspector;
+
+inspeccion.regente = regente;
 
     indiceParametro = 0;
 
