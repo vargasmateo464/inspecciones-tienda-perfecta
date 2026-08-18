@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Inspecciones</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f4f6f8;
+        color: #222;
+    }
+
+    .app {
+        max-width: 600px;
+        margin: auto;
+        min-height: 100vh;
+        background: white;
+    }
+
+    header {
+        background: #1f2937;
+        color: white;
+        padding: 20px;
+        text-align: center;
+    }
+
+    header h1 {
+        margin: 0;
+        font-size: 22px;
+    }
+
+    .contenido {
+        padding: 20px;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 7px;
+    }
+
+    input,
+    textarea,
+    select {
+        width: 100%;
+        padding: 13px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 16px;
+        margin-bottom: 18px;
+    }
+
+    textarea {
+        min-height: 110px;
+        resize: vertical;
+    }
+
+    button {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 8px;
+    }
+
+    .btn-principal {
+        background: #2563eb;
+        color: white;
+    }
+
+    .btn-secundario {
+        background: #e5e7eb;
+        color: #111827;
+    }
+
+    .btn-ticket {
+        background: #111827;
+        color: white;
+    }
+
+    .parametro {
+        font-size: 20px;
+        font-weight: bold;
+        line-height: 1.4;
+        margin: 20px 0;
+    }
+
+    .contador {
+        text-align: center;
+        color: #666;
+        margin-bottom: 10px;
+    }
+
+    .estados {
+        display: grid;
+        gap: 10px;
+    }
+
+    .estado {
+        padding: 17px;
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        background: white;
+        font-size: 17px;
+        font-weight: bold;
+    }
+
+    .estado.seleccionado {
+        border-color: #2563eb;
+        background: #eff6ff;
+    }
+
+    .ticket {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 14px;
+        margin-top: 12px;
+        background: #fafafa;
+    }
+
+    .ticket strong {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .ticket p {
+        margin: 5px 0;
+    }
+
+    .oculto {
+        display: none;
+    }
+
+    .acciones {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .mensaje {
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 15px;
+        background: #ecfdf5;
+        color: #065f46;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+    <h1>INSPECCIÓN</h1>
+</header>
+
+<div class="contenido">
+
+    <!-- PANTALLA INICIAL -->
+
+    <section id="pantallaInicio">
+
+        <h2>Nueva inspección</h2>
+
+        <label>Fecha de inspección</label>
+        <input type="date" id="fechaInspeccion">
+
+        <label>Bodega</label>
+        <input
+            type="text"
+            id="bodega"
+            placeholder="Ingrese la bodega"
+        >
+
+        <button
+            class="btn-principal"
+            onclick="iniciarInspeccion()"
+        >
+            INICIAR INSPECCIÓN
+        </button>
+
+    </section>
+
+
+    <!-- PANTALLA DE PARÁMETROS -->
+
+    <section id="pantallaParametros" class="oculto">
+
+        <div class="contador" id="contador"></div>
+
+        <div class="parametro" id="nombreParametro"></div>
+
+        <label>Estado</label>
+
+        <div class="estados">
+
+            <button
+                class="estado"
+                id="btnCumple"
+                onclick="seleccionarEstado('Cumple')"
+            >
+                🟢 CUMPLE
+            </button>
+
+            <button
+                class="estado"
+                id="btnNoCumple"
+                onclick="seleccionarEstado('No Cumple')"
+            >
+                🔴 NO CUMPLE
+            </button>
+
+            <button
+                class="estado"
+                id="btnNoAplica"
+                onclick="seleccionarEstado('No Aplica')"
+            >
+                🟡 NO APLICA
+            </button>
+
+        </div>
+
+
+        <h3>Tickets</h3>
+
+        <div id="listaTickets"></div>
+
+        <button
+            class="btn-ticket"
+            onclick="mostrarFormularioTicket()"
+        >
+            + AGREGAR TICKET
+        </button>
+
+
+        <!-- FORMULARIO TICKET -->
+
+        <div id="formularioTicket" class="oculto">
+
+            <hr>
+
+            <h3>Nuevo ticket</h3>
+
+            <label>Observación</label>
+
+            <select id="ticketObservacion">
+                <option value="">Seleccione una observación</option>
+            </select>
+
+
+            <label>Descripción</label>
+
+            <textarea
+                id="ticketDescripcion"
+                placeholder="Escriba la descripción del ticket"
+            ></textarea>
+
+
+            <label>Número de ticket</label>
+
+            <input
+                type="text"
+                id="ticketNumero"
+                placeholder="Ejemplo: STT-36816"
+            >
+
+
+            <label>Fecha de solicitud</label>
+
+            <input
+                type="date"
+                id="ticketFecha"
+            >
+
+
+            <button
+                class="btn-principal"
+                onclick="guardarTicketLocal()"
+            >
+                GUARDAR TICKET
+            </button>
+
+            <button
+                class="btn-secundario"
+                onclick="cancelarTicket()"
+            >
+                CANCELAR
+            </button>
+
+        </div>
+
+
+        <div class="acciones">
+
+            <button
+                class="btn-secundario"
+                onclick="anteriorParametro()"
+            >
+                ← ANTERIOR
+            </button>
+
+            <button
+                class="btn-principal"
+                onclick="siguienteParametro()"
+            >
+                SIGUIENTE →
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- FINAL -->
+
+    <section id="pantallaFinal" class="oculto">
+
+        <h2>Inspección terminada</h2>
+
+        <div class="mensaje">
+            La inspección fue completada correctamente.
+        </div>
+
+        <button
+            class="btn-principal"
+            onclick="reiniciar()"
+        >
+            NUEVA INSPECCIÓN
+        </button>
+
+    </section>
+
+</div>
+
+</div>
+
+
+<script>
+
+const parametros = [
+
+    "Letreros luminosos en funcionamiento, visibles y sin obstáculos",
+
+    "Sistema Din-Dong",
+
+    "Pantalla TV check-out",
+
+    "CCTV operando y con adecuada cobertura",
+
+    "Sistema de alarma y botones de pánico operando",
+
+    "Parqueo expedito",
+
+    "Cerraduras en funcionamiento",
+
+    "Acera despejada y limpia",
+
+    "Entorno iluminado y seguro",
+
+    "Puertas y cortinas operando",
+
+    "Anclaje zona botiquín",
+
+    "Anclaje cajas registradoras",
+
+    "Orden y limpieza",
+
+    "Señalética visible y clara",
+
+    "Extintores",
+
+    "Basureros",
+
+    "Procedimientos Generales de la Corporación"
+
+];
+
+
+let indiceParametro = 0;
+
+let inspeccion = {
+
+    fecha: "",
+    bodega: "",
+
+    resultados: [],
+
+    tickets: []
+
+};
+
+
+let estadoActual = null;
+
+
+// FECHA AUTOMÁTICA
+
+document.getElementById("fechaInspeccion").value =
+    new Date().toISOString().split("T")[0];
+
+
+// INICIAR
+
+function iniciarInspeccion() {
+
+    const fecha =
+        document.getElementById("fechaInspeccion").value;
+
+    const bodega =
+        document.getElementById("bodega").value.trim();
+
+
+    if (!fecha) {
+
+        alert("Ingrese la fecha de inspección.");
+
+        return;
+
+    }
+
+
+    if (!bodega) {
+
+        alert("Ingrese la bodega.");
+
+        return;
+
+    }
+
+
+    inspeccion.fecha = fecha;
+
+    inspeccion.bodega = bodega;
+
+    indiceParametro = 0;
+
+    inspeccion.resultados = [];
+
+    inspeccion.tickets = [];
+
+
+    document
+        .getElementById("pantallaInicio")
+        .classList.add("oculto");
+
+
+    document
+        .getElementById("pantallaParametros")
+        .classList.remove("oculto");
+
+
+    mostrarParametro();
+
+}
+
+
+// MOSTRAR PARÁMETRO
+
+function mostrarParametro() {
+
+    const parametro = parametros[indiceParametro];
+
+
+    document.getElementById("contador").innerText =
+        `PARÁMETRO ${indiceParametro + 1} DE ${parametros.length}`;
+
+
+    document.getElementById("nombreParametro").innerText =
+        parametro;
+
+
+    estadoActual = obtenerEstado(parametro);
+
+
+    actualizarBotones();
+
+    mostrarTickets();
+
+
+    document
+        .getElementById("formularioTicket")
+        .classList.add("oculto");
+
+}
+
+
+// OBTENER ESTADO
+
+function obtenerEstado(parametro) {
+
+    const resultado =
+        inspeccion.resultados.find(
+            r => r.parametro === parametro
+        );
+
+
+    return resultado ? resultado.estado : null;
+
+}
+
+
+// SELECCIONAR ESTADO
+
+function seleccionarEstado(estado) {
+
+    estadoActual = estado;
+
+
+    const existente =
+        inspeccion.resultados.find(
+            r => r.parametro === parametros[indiceParametro]
+        );
+
+
+    if (existente) {
+
+        existente.estado = estado;
+
+    } else {
+
+        inspeccion.resultados.push({
+
+            parametro: parametros[indiceParametro],
+
+            estado: estado
+
+        });
+
+    }
+
+
+    actualizarBotones();
+
+}
+
+
+// ACTUALIZAR BOTONES
+
+function actualizarBotones() {
+
+    document
+        .getElementById("btnCumple")
+        .classList.remove("seleccionado");
+
+    document
+        .getElementById("btnNoCumple")
+        .classList.remove("seleccionado");
+
+    document
+        .getElementById("btnNoAplica")
+        .classList.remove("seleccionado");
+
+
+    if (estadoActual === "Cumple") {
+
+        document
+            .getElementById("btnCumple")
+            .classList.add("seleccionado");
+
+    }
+
+
+    if (estadoActual === "No Cumple") {
+
+        document
+            .getElementById("btnNoCumple")
+            .classList.add("seleccionado");
+
+    }
+
+
+    if (estadoActual === "No Aplica") {
+
+        document
+            .getElementById("btnNoAplica")
+            .classList.add("seleccionado");
+
+    }
+
+}
+
+
+// SIGUIENTE
+
+function siguienteParametro() {
+
+    if (!estadoActual) {
+
+        alert("Seleccione el estado del parámetro.");
+
+        return;
+
+    }
+
+
+    if (indiceParametro < parametros.length - 1) {
+
+        indiceParametro++;
+
+        mostrarParametro();
+
+    } else {
+
+        finalizarInspeccion();
+
+    }
+
+}
+
+
+// ANTERIOR
+
+function anteriorParametro() {
+
+    if (indiceParametro > 0) {
+
+        indiceParametro--;
+
+        mostrarParametro();
+
+    }
+
+}
+
+
+// MOSTRAR FORMULARIO TICKET
+
+function mostrarFormularioTicket() {
+
+    cargarObservaciones();
+
+    document
+        .getElementById("formularioTicket")
+        .classList.remove("oculto");
+
+
+    document
+        .getElementById("ticketFecha")
+        .value =
+        new Date().toISOString().split("T")[0];
+
+}
+
+
+// CARGAR OBSERVACIONES
+
+function cargarObservaciones() {
+
+    const select =
+        document.getElementById("ticketObservacion");
+
+
+    select.innerHTML =
+        '<option value="">Seleccione una observación</option>';
+
+
+    parametros.forEach(parametro => {
+
+        const option =
+            document.createElement("option");
+
+        option.value = parametro;
+
+        option.textContent = parametro;
+
+        select.appendChild(option);
+
+    });
+
+}
+
+
+// GUARDAR TICKET LOCALMENTE
+
+function guardarTicketLocal() {
+
+    const observacion =
+        document.getElementById("ticketObservacion").value;
+
+
+    const descripcion =
+        document.getElementById("ticketDescripcion").value.trim();
+
+
+    const numero =
+        document.getElementById("ticketNumero").value.trim();
+
+
+    const fecha =
+        document.getElementById("ticketFecha").value;
+
+
+    if (!observacion) {
+
+        alert("Seleccione la observación.");
+
+        return;
+
+    }
+
+
+    if (!descripcion) {
+
+        alert("Ingrese la descripción.");
+
+        return;
+
+    }
+
+
+    if (!numero) {
+
+        alert("Ingrese el número de ticket.");
+
+        return;
+
+    }
+
+
+    if (!fecha) {
+
+        alert("Ingrese la fecha de solicitud.");
+
+        return;
+
+    }
+
+
+    inspeccion.tickets.push({
+
+        parametro:
+            parametros[indiceParametro],
+
+        observacion:
+            observacion,
+
+        descripcion:
+            descripcion,
+
+        numero_ticket:
+            numero,
+
+        fecha_solicitud:
+            fecha
+
+    });
+
+
+    document
+        .getElementById("ticketObservacion")
+        .value = "";
+
+
+    document
+        .getElementById("ticketDescripcion")
+        .value = "";
+
+
+    document
+        .getElementById("ticketNumero")
+        .value = "";
+
+
+    document
+        .getElementById("formularioTicket")
+        .classList.add("oculto");
+
+
+    mostrarTickets();
+
+}
+
+
+// MOSTRAR TICKETS
+
+function mostrarTickets() {
+
+    const contenedor =
+        document.getElementById("listaTickets");
+
+
+    contenedor.innerHTML = "";
+
+
+    const tickets =
+        inspeccion.tickets.filter(
+            t =>
+                t.parametro ===
+                parametros[indiceParametro]
+        );
+
+
+    if (tickets.length === 0) {
+
+        contenedor.innerHTML =
+            "<p>No hay tickets registrados.</p>";
+
+        return;
+
+    }
+
+
+    tickets.forEach((ticket, index) => {
+
+        const div =
+            document.createElement("div");
+
+        div.className = "ticket";
+
+
+        div.innerHTML = `
+
+            <strong>Ticket: ${ticket.numero_ticket}</strong>
+
+            <p><b>Observación:</b>
+            ${ticket.observacion}</p>
+
+            <p><b>Descripción:</b>
+            ${ticket.descripcion}</p>
+
+            <p><b>Fecha:</b>
+            ${ticket.fecha_solicitud}</p>
+
+        `;
+
+
+        contenedor.appendChild(div);
+
+    });
+
+}
+
+
+// FINALIZAR
+
+function finalizarInspeccion() {
+
+    console.log("INSPECCIÓN:", inspeccion);
+
+    document
+        .getElementById("pantallaParametros")
+        .classList.add("oculto");
+
+
+    document
+        .getElementById("pantallaFinal")
+        .classList.remove("oculto");
+
+}
+
+
+// REINICIAR
+
+function reiniciar() {
+
+    location.reload();
+
+}
+
+</script>
+
+</body>
+</html>
