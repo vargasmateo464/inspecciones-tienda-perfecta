@@ -377,8 +377,6 @@ const supabaseClient = window.supabase.createClient(
 );
 
 
-// PROBAR CONEXIÓN CON SUPABASE
-
 async function probarSupabase() {
 
     const { data, error } =
@@ -392,10 +390,7 @@ async function probarSupabase() {
 
         console.error("Error Supabase:", error);
 
-        alert("No se pudo conectar con la base de datos.");
-
         return false;
-
     }
 
     console.log("Parámetros recibidos:", data);
@@ -403,8 +398,6 @@ async function probarSupabase() {
     return true;
 }
 
-
-// EJECUTAR PRUEBA
 
 probarSupabase();
 
