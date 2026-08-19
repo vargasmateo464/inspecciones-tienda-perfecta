@@ -688,38 +688,113 @@ obtener("ticketFecha").value =
 
 async function cargarParametros() {
 
+    console.log("PROBANDO CONEXIÓN CON SUPABASE...");
+
     try {
 
-        const { data, error } =
+        const { data, error } = await supabaseClient
+            .from("parametros")
+            .select("*");
 
-            await supabaseClient
-
-                .from("parametros")
-
-                .select("parametro, orden")
-
-                .eq("activo", true)
-
-                .order("orden");
-
+        console.log("DATOS DE SUPABASE:", data);
+        console.log("ERROR DE SUPABASE:", error);
 
         if (error) {
 
             console.error(
-                "Error cargando parámetros:",
+                "ERROR CARGANDO PARAMETROS:",
                 error
             );
 
-            parametros =
-                parametrosRespaldo;
+            parametros = parametrosRespaldo;
 
             obtener("estadoConexion").innerText =
-                "⚠️ No se pudieron actualizar los parámetros. Se utilizará la lista guardada.";
+                "⚠️ Se utilizará la lista de respaldo.";
 
             return;
+        }
+
+        if (!data || data.length === 0) {
+
+            console.warn(
+                "Supabase respondió correctamente, pero no devolvió registros."
+            );
+
+            parametros = parametrosRespaldo;
+
+            obtener("estadoConexion").innerText =
+                "⚠️ No hay parámetros en Supabase.";
+
+            return;
+        }
+
+        /*
+         * Buscamos automáticamente el campo que contiene
+         * el nombre del parámetro.
+         */
+
+        parametros = data
+            .map(fila => {
+
+                return (
+                    fila.parametro ??
+                    fila.nombre_parametro ??
+                    fila.nombre ??
+                    fila.descripcion ??
+                    null
+                );
+
+            })
+            .filter(valor => valor !== null && valor !== "");
+
+        
+        console.log(
+            "PARAMETROS RECIBIDOS:",
+            parametros
+        );
+
+        console.log(
+            "CANTIDAD:",
+            parametros.length
+        );
+
+
+        /*
+         * Si por alguna razón el nombre de la columna
+         * no coincide, usamos la lista de respaldo.
+         */
+
+        if (parametros.length === 0) {
+
+            console.warn(
+                "No se encontró una columna reconocible para el nombre del parámetro."
+            );
+
+            parametros = parametrosRespaldo;
 
         }
 
+
+        obtener("estadoConexion").innerText =
+            "✓ Conectado a la base de datos";
+
+
+    } catch (error) {
+
+        console.error(
+            "ERROR GENERAL:",
+            error
+        );
+
+        parametros =
+            parametrosRespaldo;
+
+        obtener("estadoConexion").innerText =
+            "⚠️ Error de conexión. Se utilizará la lista de respaldo.";
+
+    }
+
+}
 
         if (
             data &&
