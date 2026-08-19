@@ -364,9 +364,41 @@
 
 </div>
 
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 
+const SUPABASE_URL = "https://yexzuexynewloljdaxme.supabase.co/rest/v1/";
+const SUPABASE_KEY = "sb_publishable_xCwUcWg4FoZ57UCw91KCLg_3HPv5kPs" ;
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+async function probarSupabase() {
+
+    const { data, error } =
+        await supabaseClient
+            .from("parametros")
+            .select("parametro, orden")
+            .eq("activo", true)
+            .order("orden");
+
+    if (error) {
+
+        console.error("Error Supabase:", error);
+
+        alert("No se pudo conectar con la base de datos.");
+
+        return false;
+
+    }
+
+    console.log("Parámetros recibidos:", data);
+
+    return true;
+}
+   
 const parametros = [
 
     "Letreros luminosos en funcionamiento, visibles y sin obstáculos",
