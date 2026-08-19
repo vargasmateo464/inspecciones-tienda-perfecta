@@ -497,12 +497,11 @@ const SUPABASE_KEY =
 "sb_publishable_xCwUcWg4FoZ57UCw91KCLg_3HPv5kPs";
 
 
-const supabaseClient =
+window.supabaseClient =
     window.supabase.createClient(
         SUPABASE_URL,
         SUPABASE_KEY
     );
-
 
 
 // =========================================
@@ -515,7 +514,7 @@ async function probarSupabase() {
 
 
     const { data, error } =
-        await supabaseClient
+        await window.supabaseClient
             .from("parametros")
             .select("parametro, orden")
             .eq("activo", true)
