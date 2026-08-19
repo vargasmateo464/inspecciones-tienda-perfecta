@@ -365,15 +365,19 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
 
-const SUPABASE_URL = "https://yexzuexynewloljdaxme.supabase.co/rest/v1/";
-const SUPABASE_KEY = "sb_publishable_xCwUcWg4FoZ57UCw91KCLg_3HPv5kPs" ;
+const SUPABASE_URL = "https://yexzuexynewloljdaxme.supabase.co";
+const SUPABASE_KEY = "sb_publishable_xCwUcWg4FoZ57UCw91KCLg_3HPv5kPs";
 
 const supabaseClient = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
 );
+
+
+// PROBAR CONEXIÓN CON SUPABASE
 
 async function probarSupabase() {
 
@@ -398,7 +402,12 @@ async function probarSupabase() {
 
     return true;
 }
-   
+
+
+// EJECUTAR PRUEBA
+
+probarSupabase();
+
 const parametros = [
 
     "Letreros luminosos en funcionamiento, visibles y sin obstáculos",
