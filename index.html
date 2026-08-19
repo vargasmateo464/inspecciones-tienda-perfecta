@@ -5,7 +5,8 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>Check List de Inspección de Seguridad</title>
 
@@ -18,11 +19,12 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: #f4f6f8;
+    background: #f3f4f6;
     color: #222;
 }
 
 .app {
+    width: 100%;
     max-width: 600px;
     margin: auto;
     min-height: 100vh;
@@ -32,7 +34,7 @@ body {
 header {
     background: #1f2937;
     color: white;
-    padding: 20px;
+    padding: 22px 18px;
     text-align: center;
 }
 
@@ -44,6 +46,14 @@ header h1 {
 
 .contenido {
     padding: 20px;
+}
+
+h2 {
+    margin-top: 0;
+}
+
+h3 {
+    margin-top: 25px;
 }
 
 label {
@@ -61,6 +71,7 @@ select {
     border-radius: 8px;
     font-size: 16px;
     margin-bottom: 18px;
+    background: white;
 }
 
 textarea {
@@ -70,13 +81,17 @@ textarea {
 
 button {
     width: 100%;
-    padding: 14px;
+    padding: 15px;
     border: none;
     border-radius: 8px;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
     margin-top: 8px;
+}
+
+button:active {
+    transform: scale(0.99);
 }
 
 .btn-principal {
@@ -94,26 +109,13 @@ button {
     color: white;
 }
 
-.parametro {
-    font-size: 20px;
-    font-weight: bold;
-    line-height: 1.4;
-    margin: 20px 0;
-}
-
-.contador {
-    text-align: center;
-    color: #666;
-    margin-bottom: 10px;
-}
-
 .estados {
     display: grid;
-    gap: 10px;
+    gap: 12px;
 }
 
 .estado {
-    padding: 17px;
+    padding: 18px;
     border: 2px solid #ddd;
     border-radius: 10px;
     background: white;
@@ -126,6 +128,20 @@ button {
     background: #eff6ff;
 }
 
+.parametro {
+    font-size: 21px;
+    font-weight: bold;
+    line-height: 1.4;
+    margin: 20px 0 25px;
+}
+
+.contador {
+    text-align: center;
+    color: #666;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
 .ticket {
     border: 1px solid #ddd;
     border-radius: 10px;
@@ -136,15 +152,11 @@ button {
 
 .ticket strong {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
 }
 
 .ticket p {
-    margin: 5px 0;
-}
-
-.oculto {
-    display: none;
+    margin: 7px 0;
 }
 
 .acciones {
@@ -169,6 +181,22 @@ button {
     margin-top: 10px;
 }
 
+.oculto {
+    display: none !important;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #ddd;
+    margin: 25px 0;
+}
+
+.cargando {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+}
+
 </style>
 
 </head>
@@ -177,7 +205,6 @@ button {
 <body>
 
 <div class="app">
-
 
 <header>
 
@@ -200,7 +227,9 @@ CHECK LIST DE INSPECCIÓN DE SEGURIDAD
 <h2>Nueva inspección</h2>
 
 
-<label>Fecha de inspección</label>
+<label>
+Fecha de inspección
+</label>
 
 <input
     type="date"
@@ -208,7 +237,9 @@ CHECK LIST DE INSPECCIÓN DE SEGURIDAD
 >
 
 
-<label>Hora de inspección</label>
+<label>
+Hora de inspección
+</label>
 
 <input
     type="time"
@@ -216,7 +247,9 @@ CHECK LIST DE INSPECCIÓN DE SEGURIDAD
 >
 
 
-<label>Bodega</label>
+<label>
+Bodega
+</label>
 
 <input
     type="text"
@@ -225,7 +258,9 @@ CHECK LIST DE INSPECCIÓN DE SEGURIDAD
 >
 
 
-<label>Nombre del inspector</label>
+<label>
+Nombre del inspector
+</label>
 
 <input
     type="text"
@@ -234,7 +269,9 @@ CHECK LIST DE INSPECCIÓN DE SEGURIDAD
 >
 
 
-<label>Nombre del regente o encargado del área</label>
+<label>
+Nombre del regente o encargado del área
+</label>
 
 <input
     type="text"
@@ -244,12 +281,11 @@ CHECK LIST DE INSPECCIÓN DE SEGURIDAD
 
 
 <button
+    type="button"
     class="btn-principal"
-    onclick="iniciarInspeccion()"
+    id="btnIniciar"
 >
-
 INICIAR INSPECCIÓN
-
 </button>
 
 
@@ -273,79 +309,78 @@ Conectando con la base de datos...
     class="oculto"
 >
 
+
 <div
-    class="contador"
     id="contador"
+    class="contador"
 ></div>
 
 
 <div
-    class="parametro"
     id="nombreParametro"
+    class="parametro"
 ></div>
 
 
-<label>Estado</label>
+<label>
+Estado
+</label>
 
 
 <div class="estados">
 
 
 <button
+    type="button"
     class="estado"
     id="btnCumple"
-    onclick="seleccionarEstado('Cumple')"
 >
-
 🟢 CUMPLE
-
 </button>
 
 
 <button
+    type="button"
     class="estado"
     id="btnNoCumple"
-    onclick="seleccionarEstado('No Cumple')"
 >
-
 🔴 NO CUMPLE
-
 </button>
 
 
 <button
+    type="button"
     class="estado"
     id="btnNoAplica"
-    onclick="seleccionarEstado('No Aplica')"
 >
-
 🟡 NO APLICA
-
 </button>
 
 
 </div>
 
 
-<h3>Tickets</h3>
+
+<h3>
+Tickets
+</h3>
 
 
 <div id="listaTickets"></div>
 
 
 <button
+    type="button"
     class="btn-ticket"
-    onclick="mostrarFormularioTicket()"
+    id="btnAgregarTicket"
 >
-
 + AGREGAR TICKET
-
 </button>
 
 
 
 <!-- ================================================= -->
-<!-- FORMULARIO DE TICKET -->
+<!-- FORMULARIO TICKET -->
 <!-- ================================================= -->
 
 <div
@@ -355,12 +390,18 @@ Conectando con la base de datos...
 
 <hr>
 
-<h3>Nuevo ticket</h3>
+<h3>
+Nuevo ticket
+</h3>
 
 
-<label>Observación</label>
+<label>
+Observación
+</label>
 
-<select id="ticketObservacion">
+<select
+    id="ticketObservacion"
+>
 
 <option value="">
 Seleccione una observación
@@ -369,7 +410,9 @@ Seleccione una observación
 </select>
 
 
-<label>Descripción</label>
+<label>
+Descripción
+</label>
 
 <textarea
     id="ticketDescripcion"
@@ -377,7 +420,9 @@ Seleccione una observación
 ></textarea>
 
 
-<label>Número de ticket</label>
+<label>
+Número de ticket
+</label>
 
 <input
     type="text"
@@ -386,7 +431,9 @@ Seleccione una observación
 >
 
 
-<label>Fecha de solicitud</label>
+<label>
+Fecha de solicitud
+</label>
 
 <input
     type="date"
@@ -395,22 +442,20 @@ Seleccione una observación
 
 
 <button
+    type="button"
     class="btn-principal"
-    onclick="guardarTicketLocal()"
+    id="btnGuardarTicket"
 >
-
 GUARDAR TICKET
-
 </button>
 
 
 <button
+    type="button"
     class="btn-secundario"
-    onclick="cancelarTicket()"
+    id="btnCancelarTicket"
 >
-
 CANCELAR
-
 </button>
 
 
@@ -422,26 +467,25 @@ CANCELAR
 
 
 <button
+    type="button"
     class="btn-secundario"
-    onclick="anteriorParametro()"
+    id="btnAnterior"
 >
-
 ← ANTERIOR
-
 </button>
 
 
 <button
+    type="button"
     class="btn-principal"
-    onclick="siguienteParametro()"
+    id="btnSiguiente"
 >
-
 SIGUIENTE →
-
 </button>
 
 
 </div>
+
 
 </section>
 
@@ -456,7 +500,9 @@ SIGUIENTE →
     class="oculto"
 >
 
-<h2>Inspección terminada</h2>
+<h2>
+Inspección terminada
+</h2>
 
 
 <div class="mensaje">
@@ -467,12 +513,11 @@ La inspección fue completada correctamente.
 
 
 <button
+    type="button"
     class="btn-principal"
-    onclick="reiniciar()"
+    id="btnNuevaInspeccion"
 >
-
 NUEVA INSPECCIÓN
-
 </button>
 
 </section>
@@ -493,151 +538,40 @@ NUEVA INSPECCIÓN
 
 <script>
 
+"use strict";
 
-// =====================================================
-// CONFIGURACIÓN SUPABASE
-// =====================================================
+
+/* =====================================================
+   CONFIGURACIÓN SUPABASE
+   ===================================================== */
 
 const SUPABASE_URL =
-"https://yexzuexynewloljdaxme.supabase.co";
-
+    "https://yexzuexynewloljdaxme.supabase.co";
 
 const SUPABASE_KEY =
-"sb_publishable_xCwUcWg4FoZ57UCw91KCLg_3HPv5kPs";
+    "sb_publishable_xCwUcWg4FoZ57UCw91KCLg_3HPv5kPs";
 
 
-// Crear cliente de Supabase
-// Lo ponemos en WINDOW para poder comprobarlo
-// directamente desde la consola del navegador.
+/* =====================================================
+   CLIENTE SUPABASE
+   ===================================================== */
 
-window.supabaseClient =
+const supabaseClient =
     window.supabase.createClient(
         SUPABASE_URL,
         SUPABASE_KEY
     );
 
 
-// =====================================================
-// PRUEBA DE CONEXIÓN
-// =====================================================
-
-async function probarSupabase() {
-
-    console.log(
-        "================================="
-    );
-
-    console.log(
-        "PROBANDO CONEXIÓN CON SUPABASE..."
-    );
+window.supabaseClient =
+    supabaseClient;
 
 
-    try {
+/* =====================================================
+   PARÁMETROS DE RESPALDO
+   ===================================================== */
 
-        const resultado =
-            await window.supabaseClient
-                .from("parametros")
-                .select("parametro, orden")
-                .eq("activo", true)
-                .order("orden");
-
-
-        const data =
-            resultado.data;
-
-        const error =
-            resultado.error;
-
-
-        if (error) {
-
-            console.error(
-                "ERROR SUPABASE:",
-                error
-            );
-
-
-            const estado =
-                document.getElementById(
-                    "estadoConexion"
-                );
-
-
-            if (estado) {
-
-                estado.innerText =
-                    "⚠️ Error de conexión con Supabase";
-
-            }
-
-
-            return false;
-
-        }
-
-
-        console.log(
-            "CONEXIÓN CORRECTA"
-        );
-
-
-        console.log(
-            "PARÁMETROS RECIBIDOS:",
-            data
-        );
-
-
-        console.log(
-            "CANTIDAD:",
-            data ? data.length : 0
-        );
-
-
-        const estado =
-            document.getElementById(
-                "estadoConexion"
-            );
-
-
-        if (estado) {
-
-            estado.innerText =
-                "✓ Conectado a Supabase";
-
-        }
-
-
-        return true;
-
-
-    } catch (error) {
-
-
-        console.error(
-            "ERROR GENERAL:",
-            error
-        );
-
-
-        return false;
-
-    }
-
-}
-
-
-
-// Ejecutar prueba al cargar
-
-probarSupabase();
-
-</script>
-
-// =====================================================
-// PARÁMETROS
-// =====================================================
-
-const parametros = [
+const parametrosRespaldo = [
 
     "Letreros luminosos en funcionamiento, visibles y sin obstáculos",
 
@@ -676,15 +610,15 @@ const parametros = [
 ];
 
 
+/* =====================================================
+   VARIABLES
+   ===================================================== */
 
-// =====================================================
-// VARIABLES
-// =====================================================
+let parametros = [];
 
 let indiceParametro = 0;
 
 let estadoActual = null;
-
 
 let inspeccion = {
 
@@ -705,63 +639,173 @@ let inspeccion = {
 };
 
 
+/* =====================================================
+   FUNCIONES AUXILIARES
+   ===================================================== */
 
-// =====================================================
-// FECHA Y HORA AUTOMÁTICAS
-// =====================================================
+function obtener(id) {
 
-const ahora = new Date();
+    return document.getElementById(id);
 
-
-document.getElementById(
-    "fechaInspeccion"
-).value =
-    ahora.toISOString().split("T")[0];
+}
 
 
-document.getElementById(
-    "horaInspeccion"
-).value =
-    ahora.toTimeString().slice(0, 5);
+function fechaHoy() {
+
+    const ahora = new Date();
+
+    return ahora.toISOString().split("T")[0];
+
+}
 
 
+function horaActual() {
 
-// =====================================================
-// INICIAR INSPECCIÓN
-// =====================================================
+    const ahora = new Date();
+
+    return ahora.toTimeString().slice(0,5);
+
+}
+
+
+/* =====================================================
+   FECHA Y HORA
+   ===================================================== */
+
+obtener("fechaInspeccion").value =
+    fechaHoy();
+
+obtener("horaInspeccion").value =
+    horaActual();
+
+obtener("ticketFecha").value =
+    fechaHoy();
+
+
+/* =====================================================
+   CARGAR PARÁMETROS
+   ===================================================== */
+
+async function cargarParametros() {
+
+    try {
+
+        const { data, error } =
+
+            await supabaseClient
+
+                .from("parametros")
+
+                .select("parametro, orden")
+
+                .eq("activo", true)
+
+                .order("orden");
+
+
+        if (error) {
+
+            console.error(
+                "Error cargando parámetros:",
+                error
+            );
+
+            parametros =
+                parametrosRespaldo;
+
+            obtener("estadoConexion").innerText =
+                "⚠️ No se pudieron actualizar los parámetros. Se utilizará la lista guardada.";
+
+            return;
+
+        }
+
+
+        if (
+            data &&
+            data.length > 0
+        ) {
+
+            parametros =
+                data.map(
+                    fila => fila.parametro
+                );
+
+        } else {
+
+            parametros =
+                parametrosRespaldo;
+
+        }
+
+
+        console.log(
+            "CONEXIÓN CORRECTA"
+        );
+
+        console.log(
+            "PARÁMETROS RECIBIDOS:",
+            parametros
+        );
+
+        console.log(
+            "CANTIDAD:",
+            parametros.length
+        );
+
+
+        obtener("estadoConexion").innerText =
+            "✓ Conectado a Supabase";
+
+
+    } catch (error) {
+
+        console.error(
+            "Error general:",
+            error
+        );
+
+        parametros =
+            parametrosRespaldo;
+
+        obtener("estadoConexion").innerText =
+            "⚠️ Error de conexión. Se utilizará la lista guardada.";
+
+    }
+
+}
+
+
+/* =====================================================
+   INICIAR INSPECCIÓN
+   ===================================================== */
 
 function iniciarInspeccion() {
 
-
     const fecha =
-        document.getElementById(
+        obtener(
             "fechaInspeccion"
         ).value;
 
-
     const hora =
-        document.getElementById(
+        obtener(
             "horaInspeccion"
         ).value;
 
-
     const bodega =
-        document.getElementById(
+        obtener(
             "bodega"
         ).value.trim();
 
-
     const inspector =
-        document.getElementById(
+        obtener(
             "inspector"
         ).value.trim();
 
-
     const regente =
-        document.getElementById(
+        obtener(
             "regente"
         ).value.trim();
-
 
 
     if (!fecha) {
@@ -819,28 +863,37 @@ function iniciarInspeccion() {
     }
 
 
+    if (
+        !parametros ||
+        parametros.length === 0
+    ) {
 
-    inspeccion.fecha =
-        fecha;
+        alert(
+            "Todavía no se han cargado los parámetros."
+        );
 
-    inspeccion.hora =
-        hora;
+        return;
 
-    inspeccion.bodega =
-        bodega;
-
-    inspeccion.inspector =
-        inspector;
-
-    inspeccion.regente =
-        regente;
+    }
 
 
-    inspeccion.resultados =
-        [];
+    inspeccion = {
 
-    inspeccion.tickets =
-        [];
+        fecha: fecha,
+
+        hora: hora,
+
+        bodega: bodega,
+
+        inspector: inspector,
+
+        regente: regente,
+
+        resultados: [],
+
+        tickets: []
+
+    };
 
 
     indiceParametro = 0;
@@ -848,23 +901,25 @@ function iniciarInspeccion() {
     estadoActual = null;
 
 
-
-    document
-        .getElementById(
-            "pantallaInicio"
-        )
-        .classList.add(
-            "oculto"
-        );
+    obtener(
+        "pantallaInicio"
+    ).classList.add(
+        "oculto"
+    );
 
 
-    document
-        .getElementById(
-            "pantallaParametros"
-        )
-        .classList.remove(
-            "oculto"
-        );
+    obtener(
+        "pantallaFinal"
+    ).classList.add(
+        "oculto"
+    );
+
+
+    obtener(
+        "pantallaParametros"
+    ).classList.remove(
+        "oculto"
+    );
 
 
     mostrarParametro();
@@ -872,30 +927,36 @@ function iniciarInspeccion() {
 }
 
 
-
-// =====================================================
-// MOSTRAR PARÁMETRO
-// =====================================================
+/* =====================================================
+   MOSTRAR PARÁMETRO
+   ===================================================== */
 
 function mostrarParametro() {
+
+    if (
+        parametros.length === 0
+    ) {
+
+        return;
+
+    }
 
 
     const parametro =
         parametros[indiceParametro];
 
 
-    document.getElementById(
+    obtener(
         "contador"
     ).innerText =
 
-        `PARÁMETRO ${
-            indiceParametro + 1
-        } DE ${
-            parametros.length
-        }`;
+        "PARÁMETRO " +
+        (indiceParametro + 1) +
+        " DE " +
+        parametros.length;
 
 
-    document.getElementById(
+    obtener(
         "nombreParametro"
     ).innerText =
         parametro;
@@ -919,27 +980,18 @@ function mostrarParametro() {
 
     mostrarTickets();
 
-
-    document
-        .getElementById(
-            "formularioTicket"
-        )
-        .classList.add(
-            "oculto"
-        );
+    ocultarFormularioTicket();
 
 }
 
 
-
-// =====================================================
-// SELECCIONAR ESTADO
-// =====================================================
+/* =====================================================
+   SELECCIONAR ESTADO
+   ===================================================== */
 
 function seleccionarEstado(
     estado
 ) {
-
 
     estadoActual =
         estado;
@@ -982,40 +1034,31 @@ function seleccionarEstado(
 }
 
 
-
-// =====================================================
-// ACTUALIZAR BOTONES
-// =====================================================
+/* =====================================================
+   ACTUALIZAR BOTONES DE ESTADO
+   ===================================================== */
 
 function actualizarBotones() {
 
-
-    document
-        .getElementById(
-            "btnCumple"
-        )
-        .classList.remove(
-            "seleccionado"
-        );
+    obtener(
+        "btnCumple"
+    ).classList.remove(
+        "seleccionado"
+    );
 
 
-    document
-        .getElementById(
-            "btnNoCumple"
-        )
-        .classList.remove(
-            "seleccionado"
-        );
+    obtener(
+        "btnNoCumple"
+    ).classList.remove(
+        "seleccionado"
+    );
 
 
-    document
-        .getElementById(
-            "btnNoAplica"
-        )
-        .classList.remove(
-            "seleccionado"
-        );
-
+    obtener(
+        "btnNoAplica"
+    ).classList.remove(
+        "seleccionado"
+    );
 
 
     if (
@@ -1023,13 +1066,11 @@ function actualizarBotones() {
         "Cumple"
     ) {
 
-        document
-            .getElementById(
-                "btnCumple"
-            )
-            .classList.add(
-                "seleccionado"
-            );
+        obtener(
+            "btnCumple"
+        ).classList.add(
+            "seleccionado"
+        );
 
     }
 
@@ -1039,13 +1080,11 @@ function actualizarBotones() {
         "No Cumple"
     ) {
 
-        document
-            .getElementById(
-                "btnNoCumple"
-            )
-            .classList.add(
-                "seleccionado"
-            );
+        obtener(
+            "btnNoCumple"
+        ).classList.add(
+            "seleccionado"
+        );
 
     }
 
@@ -1055,26 +1094,22 @@ function actualizarBotones() {
         "No Aplica"
     ) {
 
-        document
-            .getElementById(
-                "btnNoAplica"
-            )
-            .classList.add(
-                "seleccionado"
-            );
+        obtener(
+            "btnNoAplica"
+        ).classList.add(
+            "seleccionado"
+        );
 
     }
 
 }
 
 
-
-// =====================================================
-// SIGUIENTE
-// =====================================================
+/* =====================================================
+   SIGUIENTE PARÁMETRO
+   ===================================================== */
 
 function siguienteParametro() {
-
 
     if (!estadoActual) {
 
@@ -1105,13 +1140,11 @@ function siguienteParametro() {
 }
 
 
-
-// =====================================================
-// ANTERIOR
-// =====================================================
+/* =====================================================
+   ANTERIOR PARÁMETRO
+   ===================================================== */
 
 function anteriorParametro() {
-
 
     if (
         indiceParametro > 0
@@ -1126,46 +1159,53 @@ function anteriorParametro() {
 }
 
 
-
-// =====================================================
-// FORMULARIO TICKET
-// =====================================================
+/* =====================================================
+   MOSTRAR FORMULARIO TICKET
+   ===================================================== */
 
 function mostrarFormularioTicket() {
-
 
     cargarObservaciones();
 
 
-    document
-        .getElementById(
-            "formularioTicket"
-        )
-        .classList.remove(
-            "oculto"
-        );
-
-
-    document.getElementById(
+    obtener(
         "ticketFecha"
     ).value =
-        new Date()
-            .toISOString()
-            .split("T")[0];
+        fechaHoy();
+
+
+    obtener(
+        "formularioTicket"
+    ).classList.remove(
+        "oculto"
+    );
 
 }
 
 
+/* =====================================================
+   OCULTAR FORMULARIO TICKET
+   ===================================================== */
 
-// =====================================================
-// OBSERVACIONES
-// =====================================================
+function ocultarFormularioTicket() {
+
+    obtener(
+        "formularioTicket"
+    ).classList.add(
+        "oculto"
+    );
+
+}
+
+
+/* =====================================================
+   CARGAR OBSERVACIONES
+   ===================================================== */
 
 function cargarObservaciones() {
 
-
     const select =
-        document.getElementById(
+        obtener(
             "ticketObservacion"
         );
 
@@ -1174,22 +1214,22 @@ function cargarObservaciones() {
         "";
 
 
-    const primeraOpcion =
+    const primera =
         document.createElement(
             "option"
         );
 
 
-    primeraOpcion.value =
+    primera.value =
         "";
 
 
-    primeraOpcion.textContent =
+    primera.textContent =
         "Seleccione una observación";
 
 
     select.appendChild(
-        primeraOpcion
+        primera
     );
 
 
@@ -1220,37 +1260,34 @@ function cargarObservaciones() {
 }
 
 
+/* =====================================================
+   GUARDAR TICKET
+   ===================================================== */
 
-// =====================================================
-// GUARDAR TICKET
-// =====================================================
-
-function guardarTicketLocal() {
-
+function guardarTicket() {
 
     const observacion =
-        document.getElementById(
+        obtener(
             "ticketObservacion"
         ).value;
 
 
     const descripcion =
-        document.getElementById(
+        obtener(
             "ticketDescripcion"
         ).value.trim();
 
 
     const numero =
-        document.getElementById(
+        obtener(
             "ticketNumero"
         ).value.trim();
 
 
     const fecha =
-        document.getElementById(
+        obtener(
             "ticketFecha"
         ).value;
-
 
 
     if (!observacion) {
@@ -1297,7 +1334,6 @@ function guardarTicketLocal() {
     }
 
 
-
     inspeccion.tickets.push({
 
         parametro:
@@ -1318,29 +1354,22 @@ function guardarTicketLocal() {
     });
 
 
-
-    document.getElementById(
+    obtener(
         "ticketObservacion"
     ).value = "";
 
 
-    document.getElementById(
+    obtener(
         "ticketDescripcion"
     ).value = "";
 
 
-    document.getElementById(
+    obtener(
         "ticketNumero"
     ).value = "";
 
 
-    document
-        .getElementById(
-            "formularioTicket"
-        )
-        .classList.add(
-            "oculto"
-        );
+    ocultarFormularioTicket();
 
 
     mostrarTickets();
@@ -1348,16 +1377,14 @@ function guardarTicketLocal() {
 }
 
 
-
-// =====================================================
-// MOSTRAR TICKETS
-// =====================================================
+/* =====================================================
+   MOSTRAR TICKETS
+   ===================================================== */
 
 function mostrarTickets() {
 
-
     const contenedor =
-        document.getElementById(
+        obtener(
             "listaTickets"
         );
 
@@ -1366,13 +1393,16 @@ function mostrarTickets() {
         "";
 
 
+    const parametroActual =
+        parametros[indiceParametro];
+
+
     const tickets =
         inspeccion.tickets.filter(
-            t =>
-                t.parametro ===
-                parametros[indiceParametro]
+            ticket =>
+                ticket.parametro ===
+                parametroActual
         );
-
 
 
     if (
@@ -1380,17 +1410,15 @@ function mostrarTickets() {
     ) {
 
         contenedor.innerHTML =
-            "<p>No hay tickets registrados.</p>";
+            "<p>No hay tickets registrados para este parámetro.</p>";
 
         return;
 
     }
 
 
-
     tickets.forEach(
         ticket => {
-
 
             const div =
                 document.createElement(
@@ -1402,29 +1430,71 @@ function mostrarTickets() {
                 "ticket";
 
 
-            div.innerHTML = `
+            const titulo =
+                document.createElement(
+                    "strong"
+                );
 
-                <strong>
-                    Ticket:
-                    ${ticket.numero_ticket}
-                </strong>
 
-                <p>
-                    <b>Observación:</b>
-                    ${ticket.observacion}
-                </p>
+            titulo.textContent =
+                "Ticket: " +
+                ticket.numero_ticket;
 
-                <p>
-                    <b>Descripción:</b>
-                    ${ticket.descripcion}
-                </p>
 
-                <p>
-                    <b>Fecha:</b>
-                    ${ticket.fecha_solicitud}
-                </p>
+            const p1 =
+                document.createElement(
+                    "p"
+                );
 
-            `;
+
+            p1.innerHTML =
+                "<b>Observación:</b> " +
+                escaparHTML(
+                    ticket.observacion
+                );
+
+
+            const p2 =
+                document.createElement(
+                    "p"
+                );
+
+
+            p2.innerHTML =
+                "<b>Descripción:</b> " +
+                escaparHTML(
+                    ticket.descripcion
+                );
+
+
+            const p3 =
+                document.createElement(
+                    "p"
+                );
+
+
+            p3.innerHTML =
+                "<b>Fecha:</b> " +
+                escaparHTML(
+                    ticket.fecha_solicitud
+                );
+
+
+            div.appendChild(
+                titulo
+            );
+
+            div.appendChild(
+                p1
+            );
+
+            div.appendChild(
+                p2
+            );
+
+            div.appendChild(
+                p3
+            );
 
 
             contenedor.appendChild(
@@ -1437,70 +1507,239 @@ function mostrarTickets() {
 }
 
 
+/* =====================================================
+   SEGURIDAD PARA TEXTO DE TICKETS
+   ===================================================== */
 
-// =====================================================
-// FINALIZAR
-// =====================================================
+function escaparHTML(
+    texto
+) {
+
+    return String(texto)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =====================================================
+   FINALIZAR
+   ===================================================== */
 
 function finalizarInspeccion() {
 
+    console.log(
+        "================================="
+    );
 
     console.log(
-        "INSPECCIÓN COMPLETA:",
+        "INSPECCIÓN COMPLETA"
+    );
+
+    console.log(
         inspeccion
     );
 
+    console.log(
+        "RESULTADOS:",
+        inspeccion.resultados
+    );
 
-    document
-        .getElementById(
-            "pantallaParametros"
-        )
-        .classList.add(
-            "oculto"
-        );
+    console.log(
+        "TICKETS:",
+        inspeccion.tickets
+    );
 
 
-    document
-        .getElementById(
-            "pantallaFinal"
-        )
-        .classList.remove(
-            "oculto"
-        );
+    obtener(
+        "pantallaParametros"
+    ).classList.add(
+        "oculto"
+    );
+
+
+    obtener(
+        "pantallaFinal"
+    ).classList.remove(
+        "oculto"
+    );
 
 }
 
 
-
-// =====================================================
-// CANCELAR TICKET
-// =====================================================
+/* =====================================================
+   CANCELAR TICKET
+   ===================================================== */
 
 function cancelarTicket() {
 
-
-    document
-        .getElementById(
-            "formularioTicket"
-        )
-        .classList.add(
-            "oculto"
-        );
+    ocultarFormularioTicket();
 
 }
 
 
+/* =====================================================
+   NUEVA INSPECCIÓN
+   ===================================================== */
 
-// =====================================================
-// REINICIAR
-// =====================================================
-
-function reiniciar() {
+function nuevaInspeccion() {
 
     location.reload();
 
 }
 
+
+/* =====================================================
+   EVENTOS DE LOS BOTONES
+   ===================================================== */
+
+obtener(
+    "btnIniciar"
+).addEventListener(
+    "click",
+    iniciarInspeccion
+);
+
+
+obtener(
+    "btnCumple"
+).addEventListener(
+    "click",
+    function() {
+
+        seleccionarEstado(
+            "Cumple"
+        );
+
+    }
+);
+
+
+obtener(
+    "btnNoCumple"
+).addEventListener(
+    "click",
+    function() {
+
+        seleccionarEstado(
+            "No Cumple"
+        );
+
+    }
+);
+
+
+obtener(
+    "btnNoAplica"
+).addEventListener(
+    "click",
+    function() {
+
+        seleccionarEstado(
+            "No Aplica"
+        );
+
+    }
+);
+
+
+obtener(
+    "btnSiguiente"
+).addEventListener(
+    "click",
+    siguienteParametro
+);
+
+
+obtener(
+    "btnAnterior"
+).addEventListener(
+    "click",
+    anteriorParametro
+);
+
+
+obtener(
+    "btnAgregarTicket"
+).addEventListener(
+    "click",
+    mostrarFormularioTicket
+);
+
+
+obtener(
+    "btnGuardarTicket"
+).addEventListener(
+    "click",
+    guardarTicket
+);
+
+
+obtener(
+    "btnCancelarTicket"
+).addEventListener(
+    "click",
+    cancelarTicket
+);
+
+
+obtener(
+    "btnNuevaInspeccion"
+).addEventListener(
+    "click",
+    nuevaInspeccion
+);
+
+
+/* =====================================================
+   INICIAR APLICACIÓN
+   ===================================================== */
+
+async function iniciarAplicacion() {
+
+    console.log(
+        "================================="
+    );
+
+    console.log(
+        "APLICACIÓN INICIADA"
+    );
+
+
+    await cargarParametros();
+
+
+    console.log(
+        "Aplicación lista."
+    );
+
+}
+
+
+iniciarAplicacion();
 
 </script>
 
