@@ -39,6 +39,7 @@ header {
 header h1 {
     margin: 0;
     font-size: 22px;
+    line-height: 1.3;
 }
 
 .contenido {
@@ -161,6 +162,13 @@ button {
     color: #065f46;
 }
 
+.estado-conexion {
+    text-align: center;
+    font-size: 13px;
+    color: #666;
+    margin-top: 10px;
+}
+
 </style>
 
 </head>
@@ -170,9 +178,12 @@ button {
 
 <div class="app">
 
+
 <header>
 
-<h1>Check List de Inspección de Seguridad</h1>
+<h1>
+CHECK LIST DE INSPECCIÓN DE SEGURIDAD
+</h1>
 
 </header>
 
@@ -180,9 +191,9 @@ button {
 <div class="contenido">
 
 
-<!-- ========================================= -->
+<!-- ================================================= -->
 <!-- PANTALLA INICIAL -->
-<!-- ========================================= -->
+<!-- ================================================= -->
 
 <section id="pantallaInicio">
 
@@ -241,13 +252,21 @@ INICIAR INSPECCIÓN
 
 </button>
 
+
+<div
+    id="estadoConexion"
+    class="estado-conexion"
+>
+Conectando con la base de datos...
+</div>
+
 </section>
 
 
 
-<!-- ========================================= -->
+<!-- ================================================= -->
 <!-- PANTALLA DE PARÁMETROS -->
-<!-- ========================================= -->
+<!-- ================================================= -->
 
 <section
     id="pantallaParametros"
@@ -325,9 +344,9 @@ INICIAR INSPECCIÓN
 
 
 
-<!-- ========================================= -->
-<!-- FORMULARIO TICKET -->
-<!-- ========================================= -->
+<!-- ================================================= -->
+<!-- FORMULARIO DE TICKET -->
+<!-- ================================================= -->
 
 <div
     id="formularioTicket"
@@ -341,7 +360,6 @@ INICIAR INSPECCIÓN
 
 <label>Observación</label>
 
-
 <select id="ticketObservacion">
 
 <option value="">
@@ -353,7 +371,6 @@ Seleccione una observación
 
 <label>Descripción</label>
 
-
 <textarea
     id="ticketDescripcion"
     placeholder="Escriba la descripción del ticket"
@@ -361,7 +378,6 @@ Seleccione una observación
 
 
 <label>Número de ticket</label>
-
 
 <input
     type="text"
@@ -371,7 +387,6 @@ Seleccione una observación
 
 
 <label>Fecha de solicitud</label>
-
 
 <input
     type="date"
@@ -432,9 +447,9 @@ SIGUIENTE →
 
 
 
-<!-- ========================================= -->
+<!-- ================================================= -->
 <!-- PANTALLA FINAL -->
-<!-- ========================================= -->
+<!-- ================================================= -->
 
 <section
     id="pantallaFinal"
@@ -469,9 +484,9 @@ NUEVA INSPECCIÓN
 
 
 
-<!-- ========================================= -->
+<!-- ================================================= -->
 <!-- SUPABASE -->
-<!-- ========================================= -->
+<!-- ================================================= -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -479,23 +494,21 @@ NUEVA INSPECCIÓN
 <script>
 
 
-// =========================================
-// CONFIGURACIÓN DE SUPABASE
-// =========================================
-
-// IMPORTANTE:
-// Aquí va SOLO la URL del proyecto.
-// NO agregar /rest/v1/
+// =====================================================
+// CONFIGURACIÓN SUPABASE
+// =====================================================
 
 const SUPABASE_URL =
 "https://yexzuexynewloljdaxme.supabase.co";
 
 
-// Pega aquí tu PUBLISHABLE KEY
-
 const SUPABASE_KEY =
 "sb_publishable_xCwUcWg4FoZ57UCw91KCLg_3HPv5kPs";
 
+
+// Crear cliente de Supabase
+// Lo ponemos en WINDOW para poder comprobarlo
+// directamente desde la consola del navegador.
 
 window.supabaseClient =
     window.supabase.createClient(
@@ -504,61 +517,125 @@ window.supabaseClient =
     );
 
 
-// =========================================
-// PRUEBA DE CONEXIÓN CON SUPABASE
-// =========================================
+// =====================================================
+// PRUEBA DE CONEXIÓN
+// =====================================================
 
 async function probarSupabase() {
 
-    console.log("Probando conexión con Supabase...");
+    console.log(
+        "================================="
+    );
+
+    console.log(
+        "PROBANDO CONEXIÓN CON SUPABASE..."
+    );
 
 
-    const { data, error } =
-        await window.supabaseClient
-            .from("parametros")
-            .select("parametro, orden")
-            .eq("activo", true)
-            .order("orden");
+    try {
+
+        const resultado =
+            await window.supabaseClient
+                .from("parametros")
+                .select("parametro, orden")
+                .eq("activo", true)
+                .order("orden");
 
 
-    if (error) {
+        const data =
+            resultado.data;
+
+        const error =
+            resultado.error;
+
+
+        if (error) {
+
+            console.error(
+                "ERROR SUPABASE:",
+                error
+            );
+
+
+            const estado =
+                document.getElementById(
+                    "estadoConexion"
+                );
+
+
+            if (estado) {
+
+                estado.innerText =
+                    "⚠️ Error de conexión con Supabase";
+
+            }
+
+
+            return false;
+
+        }
+
+
+        console.log(
+            "CONEXIÓN CORRECTA"
+        );
+
+
+        console.log(
+            "PARÁMETROS RECIBIDOS:",
+            data
+        );
+
+
+        console.log(
+            "CANTIDAD:",
+            data ? data.length : 0
+        );
+
+
+        const estado =
+            document.getElementById(
+                "estadoConexion"
+            );
+
+
+        if (estado) {
+
+            estado.innerText =
+                "✓ Conectado a Supabase";
+
+        }
+
+
+        return true;
+
+
+    } catch (error) {
+
 
         console.error(
-            "ERROR SUPABASE:",
+            "ERROR GENERAL:",
             error
         );
+
 
         return false;
 
     }
 
-
-    console.log(
-        "CONEXIÓN CORRECTA."
-    );
-
-
-    console.log(
-        "Parámetros recibidos:",
-        data
-    );
-
-
-    return true;
-
 }
 
 
 
-// Ejecutar prueba
+// Ejecutar prueba al cargar
 
 probarSupabase();
 
 
 
-// =========================================
-// LISTA DE PARÁMETROS
-// =========================================
+// =====================================================
+// PARÁMETROS
+// =====================================================
 
 const parametros = [
 
@@ -600,11 +677,13 @@ const parametros = [
 
 
 
-// =========================================
+// =====================================================
 // VARIABLES
-// =========================================
+// =====================================================
 
 let indiceParametro = 0;
+
+let estadoActual = null;
 
 
 let inspeccion = {
@@ -626,13 +705,10 @@ let inspeccion = {
 };
 
 
-let estadoActual = null;
 
-
-
-// =========================================
+// =====================================================
 // FECHA Y HORA AUTOMÁTICAS
-// =========================================
+// =====================================================
 
 const ahora = new Date();
 
@@ -650,9 +726,9 @@ document.getElementById(
 
 
 
-// =========================================
+// =====================================================
 // INICIAR INSPECCIÓN
-// =========================================
+// =====================================================
 
 function iniciarInspeccion() {
 
@@ -744,22 +820,32 @@ function iniciarInspeccion() {
 
 
 
-    inspeccion.fecha = fecha;
+    inspeccion.fecha =
+        fecha;
 
-    inspeccion.hora = hora;
+    inspeccion.hora =
+        hora;
 
-    inspeccion.bodega = bodega;
+    inspeccion.bodega =
+        bodega;
 
-    inspeccion.inspector = inspector;
+    inspeccion.inspector =
+        inspector;
 
-    inspeccion.regente = regente;
+    inspeccion.regente =
+        regente;
+
+
+    inspeccion.resultados =
+        [];
+
+    inspeccion.tickets =
+        [];
 
 
     indiceParametro = 0;
 
-    inspeccion.resultados = [];
-
-    inspeccion.tickets = [];
+    estadoActual = null;
 
 
 
@@ -767,14 +853,18 @@ function iniciarInspeccion() {
         .getElementById(
             "pantallaInicio"
         )
-        .classList.add("oculto");
+        .classList.add(
+            "oculto"
+        );
 
 
     document
         .getElementById(
             "pantallaParametros"
         )
-        .classList.remove("oculto");
+        .classList.remove(
+            "oculto"
+        );
 
 
     mostrarParametro();
@@ -783,9 +873,9 @@ function iniciarInspeccion() {
 
 
 
-// =========================================
+// =====================================================
 // MOSTRAR PARÁMETRO
-// =========================================
+// =====================================================
 
 function mostrarParametro() {
 
@@ -811,33 +901,6 @@ function mostrarParametro() {
         parametro;
 
 
-    estadoActual =
-        obtenerEstado(parametro);
-
-
-    actualizarBotones();
-
-
-    mostrarTickets();
-
-
-    document
-        .getElementById(
-            "formularioTicket"
-        )
-        .classList.add("oculto");
-
-}
-
-
-
-// =========================================
-// OBTENER ESTADO
-// =========================================
-
-function obtenerEstado(parametro) {
-
-
     const resultado =
         inspeccion.resultados.find(
             r =>
@@ -846,29 +909,51 @@ function obtenerEstado(parametro) {
         );
 
 
-    return resultado
-        ? resultado.estado
-        : null;
+    estadoActual =
+        resultado
+            ? resultado.estado
+            : null;
+
+
+    actualizarBotones();
+
+    mostrarTickets();
+
+
+    document
+        .getElementById(
+            "formularioTicket"
+        )
+        .classList.add(
+            "oculto"
+        );
 
 }
 
 
 
-// =========================================
+// =====================================================
 // SELECCIONAR ESTADO
-// =========================================
+// =====================================================
 
-function seleccionarEstado(estado) {
+function seleccionarEstado(
+    estado
+) {
 
 
-    estadoActual = estado;
+    estadoActual =
+        estado;
+
+
+    const parametro =
+        parametros[indiceParametro];
 
 
     const existente =
         inspeccion.resultados.find(
             r =>
                 r.parametro ===
-                parametros[indiceParametro]
+                parametro
         );
 
 
@@ -882,7 +967,7 @@ function seleccionarEstado(estado) {
         inspeccion.resultados.push({
 
             parametro:
-                parametros[indiceParametro],
+                parametro,
 
             estado:
                 estado
@@ -898,9 +983,9 @@ function seleccionarEstado(estado) {
 
 
 
-// =========================================
+// =====================================================
 // ACTUALIZAR BOTONES
-// =========================================
+// =====================================================
 
 function actualizarBotones() {
 
@@ -949,7 +1034,6 @@ function actualizarBotones() {
     }
 
 
-
     if (
         estadoActual ===
         "No Cumple"
@@ -964,7 +1048,6 @@ function actualizarBotones() {
             );
 
     }
-
 
 
     if (
@@ -986,9 +1069,9 @@ function actualizarBotones() {
 
 
 
-// =========================================
-// SIGUIENTE PARÁMETRO
-// =========================================
+// =====================================================
+// SIGUIENTE
+// =====================================================
 
 function siguienteParametro() {
 
@@ -1023,9 +1106,9 @@ function siguienteParametro() {
 
 
 
-// =========================================
+// =====================================================
 // ANTERIOR
-// =========================================
+// =====================================================
 
 function anteriorParametro() {
 
@@ -1044,9 +1127,9 @@ function anteriorParametro() {
 
 
 
-// =========================================
-// MOSTRAR FORMULARIO TICKET
-// =========================================
+// =====================================================
+// FORMULARIO TICKET
+// =====================================================
 
 function mostrarFormularioTicket() {
 
@@ -1074,9 +1157,9 @@ function mostrarFormularioTicket() {
 
 
 
-// =========================================
-// CARGAR OBSERVACIONES
-// =========================================
+// =====================================================
+// OBSERVACIONES
+// =====================================================
 
 function cargarObservaciones() {
 
@@ -1088,12 +1171,30 @@ function cargarObservaciones() {
 
 
     select.innerHTML =
-        '<option value="">Seleccione una observación</option>';
+        "";
+
+
+    const primeraOpcion =
+        document.createElement(
+            "option"
+        );
+
+
+    primeraOpcion.value =
+        "";
+
+
+    primeraOpcion.textContent =
+        "Seleccione una observación";
+
+
+    select.appendChild(
+        primeraOpcion
+    );
 
 
     parametros.forEach(
         parametro => {
-
 
             const option =
                 document.createElement(
@@ -1120,9 +1221,9 @@ function cargarObservaciones() {
 
 
 
-// =========================================
-// GUARDAR TICKET LOCAL
-// =========================================
+// =====================================================
+// GUARDAR TICKET
+// =====================================================
 
 function guardarTicketLocal() {
 
@@ -1248,9 +1349,9 @@ function guardarTicketLocal() {
 
 
 
-// =========================================
+// =====================================================
 // MOSTRAR TICKETS
-// =========================================
+// =====================================================
 
 function mostrarTickets() {
 
@@ -1261,7 +1362,8 @@ function mostrarTickets() {
         );
 
 
-    contenedor.innerHTML = "";
+    contenedor.innerHTML =
+        "";
 
 
     const tickets =
@@ -1336,15 +1438,15 @@ function mostrarTickets() {
 
 
 
-// =========================================
+// =====================================================
 // FINALIZAR
-// =========================================
+// =====================================================
 
 function finalizarInspeccion() {
 
 
     console.log(
-        "INSPECCIÓN:",
+        "INSPECCIÓN COMPLETA:",
         inspeccion
     );
 
@@ -1370,9 +1472,9 @@ function finalizarInspeccion() {
 
 
 
-// =========================================
+// =====================================================
 // CANCELAR TICKET
-// =========================================
+// =====================================================
 
 function cancelarTicket() {
 
@@ -1389,9 +1491,9 @@ function cancelarTicket() {
 
 
 
-// =========================================
+// =====================================================
 // REINICIAR
-// =========================================
+// =====================================================
 
 function reiniciar() {
 
@@ -1401,6 +1503,7 @@ function reiniciar() {
 
 
 </script>
+
 
 </body>
 
