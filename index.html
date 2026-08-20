@@ -796,60 +796,6 @@ async function cargarParametros() {
 
 }
 
-        if (
-            data &&
-            data.length > 0
-        ) {
-
-            parametros =
-                data.map(
-                    fila => fila.parametro
-                );
-
-        } else {
-
-            parametros =
-                parametrosRespaldo;
-
-        }
-
-
-        console.log(
-            "CONEXIÓN CORRECTA"
-        );
-
-        console.log(
-            "PARÁMETROS RECIBIDOS:",
-            parametros
-        );
-
-        console.log(
-            "CANTIDAD:",
-            parametros.length
-        );
-
-
-        obtener("estadoConexion").innerText =
-            "✓ Conectado a Supabase";
-
-
-    } catch (error) {
-
-        console.error(
-            "Error general:",
-            error
-        );
-
-        parametros =
-            parametrosRespaldo;
-
-        obtener("estadoConexion").innerText =
-            "⚠️ Error de conexión. Se utilizará la lista guardada.";
-
-    }
-
-}
-
 
 /* =====================================================
    INICIAR INSPECCIÓN
