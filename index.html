@@ -1,1770 +1,283 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Check List de Inspección de Seguridad</title>
-
 <style>
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f3f4f6;
-    color: #222;
-}
-
-.app {
-    width: 100%;
-    max-width: 600px;
-    margin: auto;
-    min-height: 100vh;
-    background: white;
-}
-
-header {
-    background: #1f2937;
-    color: white;
-    padding: 22px 18px;
-    text-align: center;
-}
-
-header h1 {
-    margin: 0;
-    font-size: 22px;
-    line-height: 1.3;
-}
-
-.contenido {
-    padding: 20px;
-}
-
-h2 {
-    margin-top: 0;
-}
-
-h3 {
-    margin-top: 25px;
-}
-
-label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 7px;
-}
-
-input,
-textarea,
-select {
-    width: 100%;
-    padding: 13px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 16px;
-    margin-bottom: 18px;
-    background: white;
-}
-
-textarea {
-    min-height: 110px;
-    resize: vertical;
-}
-
-button {
-    width: 100%;
-    padding: 15px;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 8px;
-}
-
-button:active {
-    transform: scale(0.99);
-}
-
-.btn-principal {
-    background: #2563eb;
-    color: white;
-}
-
-.btn-secundario {
-    background: #e5e7eb;
-    color: #111827;
-}
-
-.btn-ticket {
-    background: #111827;
-    color: white;
-}
-
-.estados {
-    display: grid;
-    gap: 12px;
-}
-
-.estado {
-    padding: 18px;
-    border: 2px solid #ddd;
-    border-radius: 10px;
-    background: white;
-    font-size: 17px;
-    font-weight: bold;
-}
-
-.estado.seleccionado {
-    border-color: #2563eb;
-    background: #eff6ff;
-}
-
-.parametro {
-    font-size: 21px;
-    font-weight: bold;
-    line-height: 1.4;
-    margin: 20px 0 25px;
-}
-
-.contador {
-    text-align: center;
-    color: #666;
-    margin-bottom: 10px;
-    font-weight: bold;
-}
-
-.ticket {
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 14px;
-    margin-top: 12px;
-    background: #fafafa;
-}
-
-.ticket strong {
-    display: block;
-    margin-bottom: 8px;
-}
-
-.ticket p {
-    margin: 7px 0;
-}
-
-.acciones {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.mensaje {
-    padding: 15px;
-    border-radius: 8px;
-    margin-top: 15px;
-    background: #ecfdf5;
-    color: #065f46;
-}
-
-.estado-conexion {
-    text-align: center;
-    font-size: 13px;
-    color: #666;
-    margin-top: 10px;
-}
-
-.oculto {
-    display: none !important;
-}
-
-hr {
-    border: 0;
-    border-top: 1px solid #ddd;
-    margin: 25px 0;
-}
-
-.cargando {
-    text-align: center;
-    padding: 20px;
-    color: #666;
-}
-
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f3f4f6;color:#1f2937}.app{width:100%;max-width:620px;margin:auto;min-height:100vh;background:#fff}header{background:#1f2937;color:#fff;padding:22px 18px;text-align:center}header h1{margin:0;font-size:22px;line-height:1.3}.contenido{padding:20px}h2{margin-top:0}h3{margin-top:25px}label{display:block;font-weight:bold;margin-bottom:7px}input,textarea,select{width:100%;padding:13px;border:1px solid #cbd5e1;border-radius:8px;font-size:16px;margin-bottom:16px;background:#fff}textarea{min-height:110px;resize:vertical}button{width:100%;padding:15px;border:0;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;margin-top:8px}.btn-principal{background:#2563eb;color:#fff}.btn-secundario{background:#e5e7eb;color:#111827}.btn-ticket{background:#111827;color:#fff}.estados{display:grid;gap:12px}.estado{padding:18px;border:2px solid #ddd;border-radius:10px;background:#fff;font-size:17px;font-weight:bold}.estado.seleccionado{border-color:#2563eb;background:#eff6ff}.parametro{font-size:21px;font-weight:bold;line-height:1.4;margin:20px 0 25px}.contador{text-align:center;color:#666;margin-bottom:10px;font-weight:bold}.ticket{border:1px solid #ddd;border-radius:10px;padding:14px;margin-top:12px;background:#fafafa}.ticket strong{display:block;margin-bottom:8px}.ticket p{margin:7px 0}.acciones{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}.mensaje{padding:15px;border-radius:8px;margin-top:15px;background:#ecfdf5;color:#065f46}.error{padding:15px;border-radius:8px;margin-top:15px;background:#fef2f2;color:#991b1b}.estado-conexion{text-align:center;font-size:13px;color:#666;margin-top:10px}.oculto{display:none!important}hr{border:0;border-top:1px solid #ddd;margin:25px 0}.guardando{opacity:.7;pointer-events:none}
 </style>
-
 </head>
-
-
 <body>
-
 <div class="app">
-
-<header>
-
-<h1>
-CHECK LIST DE INSPECCIÓN DE SEGURIDAD
-</h1>
-
-</header>
-
-
+<header><h1>CHECK LIST DE INSPECCIÓN DE SEGURIDAD</h1></header>
 <div class="contenido">
-
-
-<!-- ================================================= -->
-<!-- PANTALLA INICIAL -->
-<!-- ================================================= -->
-
 <section id="pantallaInicio">
-
 <h2>Nueva inspección</h2>
-
-
-<label>
-Fecha de inspección
-</label>
-
-<input
-    type="date"
-    id="fechaInspeccion"
->
-
-
-<label>
-Hora de inspección
-</label>
-
-<input
-    type="time"
-    id="horaInspeccion"
->
-
-
-<label>
-Bodega
-</label>
-
-<input
-    type="text"
-    id="bodega"
-    placeholder="Ingrese la bodega"
->
-
-
-<label>
-Nombre del inspector
-</label>
-
-<input
-    type="text"
-    id="inspector"
-    placeholder="Ingrese el nombre del inspector"
->
-
-
-<label>
-Nombre del regente o encargado del área
-</label>
-
-<input
-    type="text"
-    id="regente"
-    placeholder="Ingrese el nombre del regente o encargado"
->
-
-
-<button
-    type="button"
-    class="btn-principal"
-    id="btnIniciar"
->
-INICIAR INSPECCIÓN
-</button>
-
-
-<div
-    id="estadoConexion"
-    class="estado-conexion"
->
-Conectando con la base de datos...
-</div>
-
+<label for="fechaInspeccion">Fecha de inspección</label>
+<input type="date" id="fechaInspeccion">
+<label for="horaInspeccion">Hora de inspección</label>
+<input type="time" id="horaInspeccion">
+<label for="bodega">Bodega</label>
+<input type="text" id="bodega" placeholder="Ingrese la bodega">
+<label for="inspector">Nombre del inspector</label>
+<input type="text" id="inspector" placeholder="Ingrese el nombre del inspector">
+<label for="regente">Nombre del regente o encargado del área</label>
+<input type="text" id="regente" placeholder="Ingrese el nombre del regente o encargado">
+<button type="button" class="btn-principal" id="btnIniciar">INICIAR INSPECCIÓN</button>
+<div id="estadoConexion" class="estado-conexion">Conectando con la base de datos...</div>
 </section>
 
-
-
-<!-- ================================================= -->
-<!-- PANTALLA DE PARÁMETROS -->
-<!-- ================================================= -->
-
-<section
-    id="pantallaParametros"
-    class="oculto"
->
-
-
-<div
-    id="contador"
-    class="contador"
-></div>
-
-
-<div
-    id="nombreParametro"
-    class="parametro"
-></div>
-
-
-<label>
-Estado
-</label>
-
-
+<section id="pantallaParametros" class="oculto">
+<div id="contador" class="contador"></div>
+<div id="nombreParametro" class="parametro"></div>
+<label>Estado</label>
 <div class="estados">
-
-
-<button
-    type="button"
-    class="estado"
-    id="btnCumple"
->
-🟢 CUMPLE
-</button>
-
-
-<button
-    type="button"
-    class="estado"
-    id="btnNoCumple"
->
-🔴 NO CUMPLE
-</button>
-
-
-<button
-    type="button"
-    class="estado"
-    id="btnNoAplica"
->
-🟡 NO APLICA
-</button>
-
-
+<button type="button" class="estado" id="btnCumple">🟢 CUMPLE</button>
+<button type="button" class="estado" id="btnNoCumple">🔴 NO CUMPLE</button>
+<button type="button" class="estado" id="btnNoAplica">🟡 NO APLICA</button>
 </div>
-
-
-
-<h3>
-Tickets
-</h3>
-
-
+<h3>Tickets</h3>
 <div id="listaTickets"></div>
-
-
-<button
-    type="button"
-    class="btn-ticket"
-    id="btnAgregarTicket"
->
-+ AGREGAR TICKET
-</button>
-
-
-
-<!-- ================================================= -->
-<!-- FORMULARIO TICKET -->
-<!-- ================================================= -->
-
-<div
-    id="formularioTicket"
-    class="oculto"
->
-
-<hr>
-
-<h3>
-Nuevo ticket
-</h3>
-
-
-<label>
-Observación
-</label>
-
-<select
-    id="ticketObservacion"
->
-
-<option value="">
-Seleccione una observación
-</option>
-
-</select>
-
-
-<label>
-Descripción
-</label>
-
-<textarea
-    id="ticketDescripcion"
-    placeholder="Escriba la descripción del ticket"
-></textarea>
-
-
-<label>
-Número de ticket
-</label>
-
-<input
-    type="text"
-    id="ticketNumero"
-    placeholder="Ejemplo: STT-36816"
->
-
-
-<label>
-Fecha de solicitud
-</label>
-
-<input
-    type="date"
-    id="ticketFecha"
->
-
-
-<button
-    type="button"
-    class="btn-principal"
-    id="btnGuardarTicket"
->
-GUARDAR TICKET
-</button>
-
-
-<button
-    type="button"
-    class="btn-secundario"
-    id="btnCancelarTicket"
->
-CANCELAR
-</button>
-
-
+<button type="button" class="btn-ticket" id="btnAgregarTicket">+ AGREGAR TICKET</button>
+<div id="formularioTicket" class="oculto">
+<hr><h3>Nuevo ticket</h3>
+<label for="ticketObservacion">Observación</label>
+<select id="ticketObservacion"><option value="">Seleccione una observación</option></select>
+<label for="ticketDescripcion">Descripción</label>
+<textarea id="ticketDescripcion" placeholder="Escriba la descripción del ticket"></textarea>
+<label for="ticketNumero">Número de ticket</label>
+<input type="text" id="ticketNumero" placeholder="Ejemplo: STT-36816">
+<label for="ticketFecha">Fecha de solicitud</label>
+<input type="date" id="ticketFecha">
+<button type="button" class="btn-principal" id="btnGuardarTicket">GUARDAR TICKET</button>
+<button type="button" class="btn-secundario" id="btnCancelarTicket">CANCELAR</button>
 </div>
-
-
-
 <div class="acciones">
-
-
-<button
-    type="button"
-    class="btn-secundario"
-    id="btnAnterior"
->
-← ANTERIOR
-</button>
-
-
-<button
-    type="button"
-    class="btn-principal"
-    id="btnSiguiente"
->
-SIGUIENTE →
-</button>
-
-
+<button type="button" class="btn-secundario" id="btnAnterior">← ANTERIOR</button>
+<button type="button" class="btn-principal" id="btnSiguiente">SIGUIENTE →</button>
 </div>
-
-
 </section>
 
-
-
-<!-- ================================================= -->
-<!-- PANTALLA FINAL -->
-<!-- ================================================= -->
-
-<section
-    id="pantallaFinal"
-    class="oculto"
->
-
-<h2>
-Inspección terminada
-</h2>
-
-
-<div class="mensaje">
-
-La inspección fue completada correctamente.
-
-</div>
-
-
-<button
-    type="button"
-    class="btn-principal"
-    id="btnNuevaInspeccion"
->
-NUEVA INSPECCIÓN
-</button>
-
+<section id="pantallaFinal" class="oculto">
+<h2>Inspección guardada</h2>
+<div id="mensajeFinal" class="mensaje">La inspección fue guardada correctamente.</div>
+<button type="button" class="btn-principal" id="btnNuevaInspeccion">NUEVA INSPECCIÓN</button>
 </section>
-
-
 </div>
-
 </div>
-
-
-
-<!-- ================================================= -->
-<!-- SUPABASE -->
-<!-- ================================================= -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
 <script>
-
 "use strict";
 
-
-/* =====================================================
-   CONFIGURACIÓN SUPABASE
-   ===================================================== */
-
-const SUPABASE_URL =
-    "https://yexzuexynewloljdaxme.supabase.co";
-
-const SUPABASE_KEY =
-    "sb_publishable_xCwUcWg4FoZ57UCw91KCLg_3HPv5kPs";
-
-
-/* =====================================================
-   CLIENTE SUPABASE
-   ===================================================== */
-
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
-
-
-window.supabaseClient =
-    supabaseClient;
-
-
-/* =====================================================
-   PARÁMETROS DE RESPALDO
-   ===================================================== */
+const SUPABASE_URL = "https://yexzuexynewloljdaxme.supabase.co";
+const SUPABASE_KEY = "sb_publishable_xCwUcWg4FoZ57UCw91KCLg_3HPv5kPs";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+window.supabaseClient = supabaseClient;
 
 const parametrosRespaldo = [
-
-    "Letreros luminosos en funcionamiento, visibles y sin obstáculos",
-
-    "Sistema Din-Dong",
-
-    "Pantalla TV check-out",
-
-    "CCTV operando y con adecuada cobertura",
-
-    "Sistema de alarma y botones de pánico operando",
-
-    "Parqueo expedito",
-
-    "Cerraduras en funcionamiento",
-
-    "Acera despejada y limpia",
-
-    "Entorno iluminado y seguro",
-
-    "Puertas y cortinas operando",
-
-    "Anclaje zona botiquín",
-
-    "Anclaje cajas registradoras",
-
-    "Orden y limpieza",
-
-    "Señalética visible y clara",
-
-    "Extintores",
-
-    "Basureros",
-
-    "Procedimientos Generales de la Corporación"
-
+"Letreros luminosos en funcionamiento, visibles y sin obstáculos",
+"Sistema Din-Dong",
+"Pantalla TV check-out",
+"CCTV operando y con adecuada cobertura",
+"Sistema de alarma y botones de pánico operando",
+"Parqueo expedito",
+"Cerraduras en funcionamiento",
+"Acera despejada y limpia",
+"Entorno iluminado y seguro",
+"Puertas y cortinas operando",
+"Anclaje zona botiquín",
+"Anclaje cajas registradoras",
+"Orden y limpieza",
+"Señalética visible y clara",
+"Extintores",
+"Basureros",
+"Procedimientos Generales de la Corporación"
 ];
 
+let parametros=[];
+let indiceParametro=0;
+let estadoActual=null;
+let guardando=false;
+let inspeccion={fecha:"",hora:"",bodega:"",inspector:"",regente:"",resultados:[],tickets:[]};
 
-/* =====================================================
-   VARIABLES
-   ===================================================== */
+const $=id=>document.getElementById(id);
+function fechaHoy(){return new Date().toISOString().slice(0,10)}
+function horaActual(){return new Date().toTimeString().slice(0,5)}
+function escaparHTML(texto){return String(texto).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
 
-let parametros = [];
+$("fechaInspeccion").value=fechaHoy();
+$("horaInspeccion").value=horaActual();
+$("ticketFecha").value=fechaHoy();
 
-let indiceParametro = 0;
-
-let estadoActual = null;
-
-let inspeccion = {
-
-    fecha: "",
-
-    hora: "",
-
-    bodega: "",
-
-    inspector: "",
-
-    regente: "",
-
-    resultados: [],
-
-    tickets: []
-
-};
-
-
-/* =====================================================
-   FUNCIONES AUXILIARES
-   ===================================================== */
-
-function obtener(id) {
-
-    return document.getElementById(id);
-
+async function cargarParametros(){
+try{
+const {data,error}=await supabaseClient.from("parametros").select("parametro, orden").eq("activo",true).order("orden");
+if(error) throw error;
+parametros=(data||[]).map(x=>x.parametro).filter(Boolean);
+if(!parametros.length) parametros=parametrosRespaldo.slice();
+$("estadoConexion").textContent="✓ Conectado a la base de datos";
+}catch(error){
+console.error("Error cargando parámetros:",error);
+parametros=parametrosRespaldo.slice();
+$("estadoConexion").textContent="⚠️ No se pudo leer parámetros; se usará la lista incorporada.";
+}
 }
 
-
-function fechaHoy() {
-
-    const ahora = new Date();
-
-    return ahora.toISOString().split("T")[0];
-
+function iniciarInspeccion(){
+const fecha=$("fechaInspeccion").value;
+const hora=$("horaInspeccion").value;
+const bodega=$("bodega").value.trim();
+const inspector=$("inspector").value.trim();
+const regente=$("regente").value.trim();
+if(!fecha)return alert("Ingrese la fecha de inspección.");
+if(!hora)return alert("Ingrese la hora de inspección.");
+if(!bodega)return alert("Ingrese la bodega.");
+if(!inspector)return alert("Ingrese el nombre del inspector.");
+if(!regente)return alert("Ingrese el nombre del regente o encargado del área.");
+if(!parametros.length)return alert("No se han cargado los parámetros.");
+inspeccion={fecha,hora,bodega,inspector,regente,resultados:[],tickets:[]};
+indiceParametro=0;estadoActual=null;
+$("pantallaInicio").classList.add("oculto");
+$("pantallaFinal").classList.add("oculto");
+$("pantallaParametros").classList.remove("oculto");
+mostrarParametro();
 }
 
-
-function horaActual() {
-
-    const ahora = new Date();
-
-    return ahora.toTimeString().slice(0,5);
-
+function mostrarParametro(){
+const parametro=parametros[indiceParametro];
+$("contador").textContent=`PARÁMETRO ${indiceParametro+1} DE ${parametros.length}`;
+$("nombreParametro").textContent=parametro;
+const resultado=inspeccion.resultados.find(r=>r.parametro===parametro);
+estadoActual=resultado?resultado.estado:null;
+actualizarBotones();
+mostrarTickets();
+ocultarFormularioTicket();
 }
 
-
-/* =====================================================
-   FECHA Y HORA
-   ===================================================== */
-
-obtener("fechaInspeccion").value =
-    fechaHoy();
-
-obtener("horaInspeccion").value =
-    horaActual();
-
-obtener("ticketFecha").value =
-    fechaHoy();
-
-
-/* =====================================================
-   CARGAR PARÁMETROS
-   ===================================================== */
-
-async function cargarParametros() {
-
-    console.log("PROBANDO CONEXIÓN CON SUPABASE...");
-
-    try {
-
-        const { data, error } = await supabaseClient
-            .from("parametros")
-            .select("*");
-
-        console.log("DATOS DE SUPABASE:", data);
-        console.log("ERROR DE SUPABASE:", error);
-
-        if (error) {
-
-            console.error(
-                "ERROR CARGANDO PARAMETROS:",
-                error
-            );
-
-            parametros = parametrosRespaldo;
-
-            obtener("estadoConexion").innerText =
-                "⚠️ Se utilizará la lista de respaldo.";
-
-            return;
-        }
-
-        if (!data || data.length === 0) {
-
-            console.warn(
-                "Supabase respondió correctamente, pero no devolvió registros."
-            );
-
-            parametros = parametrosRespaldo;
-
-            obtener("estadoConexion").innerText =
-                "⚠️ No hay parámetros en Supabase.";
-
-            return;
-        }
-
-        /*
-         * Buscamos automáticamente el campo que contiene
-         * el nombre del parámetro.
-         */
-
-        parametros = data
-            .map(fila => {
-
-                return (
-                    fila.parametro ??
-                    fila.nombre_parametro ??
-                    fila.nombre ??
-                    fila.descripcion ??
-                    null
-                );
-
-            })
-            .filter(valor => valor !== null && valor !== "");
-
-        
-        console.log(
-            "PARAMETROS RECIBIDOS:",
-            parametros
-        );
-
-        console.log(
-            "CANTIDAD:",
-            parametros.length
-        );
-
-
-        /*
-         * Si por alguna razón el nombre de la columna
-         * no coincide, usamos la lista de respaldo.
-         */
-
-        if (parametros.length === 0) {
-
-            console.warn(
-                "No se encontró una columna reconocible para el nombre del parámetro."
-            );
-
-            parametros = parametrosRespaldo;
-
-        }
-
-
-        obtener("estadoConexion").innerText =
-            "✓ Conectado a la base de datos";
-
-
-    } catch (error) {
-
-        console.error(
-            "ERROR GENERAL:",
-            error
-        );
-
-        parametros =
-            parametrosRespaldo;
-
-        obtener("estadoConexion").innerText =
-            "⚠️ Error de conexión. Se utilizará la lista de respaldo.";
-
-    }
-
+function seleccionarEstado(estado){
+estadoActual=estado;
+const parametro=parametros[indiceParametro];
+const existente=inspeccion.resultados.find(r=>r.parametro===parametro);
+if(existente) existente.estado=estado;
+else inspeccion.resultados.push({parametro,estado});
+actualizarBotones();
 }
 
-
-/* =====================================================
-   INICIAR INSPECCIÓN
-   ===================================================== */
-
-function iniciarInspeccion() {
-
-    const fecha =
-        obtener(
-            "fechaInspeccion"
-        ).value;
-
-    const hora =
-        obtener(
-            "horaInspeccion"
-        ).value;
-
-    const bodega =
-        obtener(
-            "bodega"
-        ).value.trim();
-
-    const inspector =
-        obtener(
-            "inspector"
-        ).value.trim();
-
-    const regente =
-        obtener(
-            "regente"
-        ).value.trim();
-
-
-    if (!fecha) {
-
-        alert(
-            "Ingrese la fecha de inspección."
-        );
-
-        return;
-
-    }
-
-
-    if (!hora) {
-
-        alert(
-            "Ingrese la hora de inspección."
-        );
-
-        return;
-
-    }
-
-
-    if (!bodega) {
-
-        alert(
-            "Ingrese la bodega."
-        );
-
-        return;
-
-    }
-
-
-    if (!inspector) {
-
-        alert(
-            "Ingrese el nombre del inspector."
-        );
-
-        return;
-
-    }
-
-
-    if (!regente) {
-
-        alert(
-            "Ingrese el nombre del regente o encargado del área."
-        );
-
-        return;
-
-    }
-
-
-    if (
-        !parametros ||
-        parametros.length === 0
-    ) {
-
-        alert(
-            "Todavía no se han cargado los parámetros."
-        );
-
-        return;
-
-    }
-
-
-    inspeccion = {
-
-        fecha: fecha,
-
-        hora: hora,
-
-        bodega: bodega,
-
-        inspector: inspector,
-
-        regente: regente,
-
-        resultados: [],
-
-        tickets: []
-
-    };
-
-
-    indiceParametro = 0;
-
-    estadoActual = null;
-
-
-    obtener(
-        "pantallaInicio"
-    ).classList.add(
-        "oculto"
-    );
-
-
-    obtener(
-        "pantallaFinal"
-    ).classList.add(
-        "oculto"
-    );
-
-
-    obtener(
-        "pantallaParametros"
-    ).classList.remove(
-        "oculto"
-    );
-
-
-    mostrarParametro();
-
+function actualizarBotones(){
+["btnCumple","btnNoCumple","btnNoAplica"].forEach(id=>$(id).classList.remove("seleccionado"));
+if(estadoActual==="Cumple") $("btnCumple").classList.add("seleccionado");
+if(estadoActual==="No Cumple") $("btnNoCumple").classList.add("seleccionado");
+if(estadoActual==="No Aplica") $("btnNoAplica").classList.add("seleccionado");
 }
 
+function siguienteParametro(){
+if(!estadoActual)return alert("Seleccione el estado del parámetro.");
+if(indiceParametro<parametros.length-1){indiceParametro++;mostrarParametro();}
+else finalizarInspeccion();
+}
+function anteriorParametro(){if(indiceParametro>0){indiceParametro--;mostrarParametro();}}
 
-/* =====================================================
-   MOSTRAR PARÁMETRO
-   ===================================================== */
+function cargarObservaciones(){
+const select=$("ticketObservacion");
+select.innerHTML="<option value=\"\">Seleccione una observación</option>";
+parametros.forEach(p=>{const o=document.createElement("option");o.value=p;o.textContent=p;select.appendChild(o);});
+}
+function mostrarFormularioTicket(){cargarObservaciones();$("ticketFecha").value=fechaHoy();$("formularioTicket").classList.remove("oculto");}
+function ocultarFormularioTicket(){$("formularioTicket").classList.add("oculto")}
 
-function mostrarParametro() {
-
-    if (
-        parametros.length === 0
-    ) {
-
-        return;
-
-    }
-
-
-    const parametro =
-        parametros[indiceParametro];
-
-
-    obtener(
-        "contador"
-    ).innerText =
-
-        "PARÁMETRO " +
-        (indiceParametro + 1) +
-        " DE " +
-        parametros.length;
-
-
-    obtener(
-        "nombreParametro"
-    ).innerText =
-        parametro;
-
-
-    const resultado =
-        inspeccion.resultados.find(
-            r =>
-                r.parametro ===
-                parametro
-        );
-
-
-    estadoActual =
-        resultado
-            ? resultado.estado
-            : null;
-
-
-    actualizarBotones();
-
-    mostrarTickets();
-
-    ocultarFormularioTicket();
-
+function guardarTicket(){
+const observacion=$("ticketObservacion").value;
+const descripcion=$("ticketDescripcion").value.trim();
+const numero=$("ticketNumero").value.trim();
+const fecha=$("ticketFecha").value;
+if(!observacion)return alert("Seleccione la observación.");
+if(!descripcion)return alert("Ingrese la descripción.");
+if(!numero)return alert("Ingrese el número de ticket.");
+if(!fecha)return alert("Ingrese la fecha de solicitud.");
+inspeccion.tickets.push({parametro:parametros[indiceParametro],observacion,descripcion,numero_ticket:numero,fecha_solicitud:fecha});
+$("ticketObservacion").value="";$("ticketDescripcion").value="";$("ticketNumero").value="";ocultarFormularioTicket();mostrarTickets();
 }
 
-
-/* =====================================================
-   SELECCIONAR ESTADO
-   ===================================================== */
-
-function seleccionarEstado(
-    estado
-) {
-
-    estadoActual =
-        estado;
-
-
-    const parametro =
-        parametros[indiceParametro];
-
-
-    const existente =
-        inspeccion.resultados.find(
-            r =>
-                r.parametro ===
-                parametro
-        );
-
-
-    if (existente) {
-
-        existente.estado =
-            estado;
-
-    } else {
-
-        inspeccion.resultados.push({
-
-            parametro:
-                parametro,
-
-            estado:
-                estado
-
-        });
-
-    }
-
-
-    actualizarBotones();
-
+function mostrarTickets(){
+const contenedor=$("listaTickets");contenedor.innerHTML="";
+const actuales=inspeccion.tickets.filter(t=>t.parametro===parametros[indiceParametro]);
+if(!actuales.length){contenedor.innerHTML="<p>No hay tickets registrados para este parámetro.</p>";return;}
+actuales.forEach(t=>{
+const div=document.createElement("div");div.className="ticket";
+div.innerHTML=`<strong>Ticket: ${escaparHTML(t.numero_ticket)}</strong><p><b>Observación:</b> ${escaparHTML(t.observacion)}</p><p><b>Descripción:</b> ${escaparHTML(t.descripcion)}</p><p><b>Fecha:</b> ${escaparHTML(t.fecha_solicitud)}</p>`;
+contenedor.appendChild(div);
+});
 }
 
+async function guardarEnSupabase(){
+if(guardando)return;
+guardando=true;
+$("pantallaParametros").classList.add("guardando");
+$("btnSiguiente").textContent="GUARDANDO...";
+try{
+const faltantes=parametros.filter(p=>!inspeccion.resultados.some(r=>r.parametro===p));
+if(faltantes.length) throw new Error("Falta registrar el estado de: "+faltantes.join(", "));
 
-/* =====================================================
-   ACTUALIZAR BOTONES DE ESTADO
-   ===================================================== */
+const inspeccionId = (window.crypto && crypto.randomUUID)
+? crypto.randomUUID()
+: ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,c=>(c^crypto.getRandomValues(new Uint8Array(1))[0]&15>>c/4).toString(16));
+const {error:errorInspeccion}=await supabaseClient
+.from("inspecciones")
+.insert({id:inspeccionId,fecha:inspeccion.fecha,hora:inspeccion.hora,bodega:inspeccion.bodega,inspector:inspeccion.inspector,regente:inspeccion.regente});
+if(errorInspeccion) throw new Error("No se pudo guardar la inspección: "+errorInspeccion.message);
 
-function actualizarBotones() {
+const resultados=inspeccion.resultados.map(r=>({inspeccion_id:inspeccionId,parametro:r.parametro,estado:r.estado}));
+const {error:errorResultados}=await supabaseClient.from("resultados").insert(resultados);
+if(errorResultados) throw new Error("La inspección se guardó, pero fallaron los resultados: "+errorResultados.message);
 
-    obtener(
-        "btnCumple"
-    ).classList.remove(
-        "seleccionado"
-    );
-
-
-    obtener(
-        "btnNoCumple"
-    ).classList.remove(
-        "seleccionado"
-    );
-
-
-    obtener(
-        "btnNoAplica"
-    ).classList.remove(
-        "seleccionado"
-    );
-
-
-    if (
-        estadoActual ===
-        "Cumple"
-    ) {
-
-        obtener(
-            "btnCumple"
-        ).classList.add(
-            "seleccionado"
-        );
-
-    }
-
-
-    if (
-        estadoActual ===
-        "No Cumple"
-    ) {
-
-        obtener(
-            "btnNoCumple"
-        ).classList.add(
-            "seleccionado"
-        );
-
-    }
-
-
-    if (
-        estadoActual ===
-        "No Aplica"
-    ) {
-
-        obtener(
-            "btnNoAplica"
-        ).classList.add(
-            "seleccionado"
-        );
-
-    }
-
+if(inspeccion.tickets.length){
+const tickets=inspeccion.tickets.map(t=>({inspeccion_id:inspeccionId,parametro:t.parametro,observacion:t.observacion,descripcion:t.descripcion,numero_ticket:t.numero_ticket,fecha_solicitud:t.fecha_solicitud}));
+const {error:errorTickets}=await supabaseClient.from("tickets").insert(tickets);
+if(errorTickets) throw new Error("La inspección y resultados se guardaron, pero fallaron los tickets: "+errorTickets.message);
 }
 
-
-/* =====================================================
-   SIGUIENTE PARÁMETRO
-   ===================================================== */
-
-function siguienteParametro() {
-
-    if (!estadoActual) {
-
-        alert(
-            "Seleccione el estado del parámetro."
-        );
-
-        return;
-
-    }
-
-
-    if (
-        indiceParametro <
-        parametros.length - 1
-    ) {
-
-        indiceParametro++;
-
-        mostrarParametro();
-
-    } else {
-
-        finalizarInspeccion();
-
-    }
-
+return inspeccionId;
+}catch(error){
+console.error("ERROR AL GUARDAR:",error);
+throw error;
+}finally{
+guardando=false;$("pantallaParametros").classList.remove("guardando");$("btnSiguiente").textContent="SIGUIENTE →";
+}
 }
 
-
-/* =====================================================
-   ANTERIOR PARÁMETRO
-   ===================================================== */
-
-function anteriorParametro() {
-
-    if (
-        indiceParametro > 0
-    ) {
-
-        indiceParametro--;
-
-        mostrarParametro();
-
-    }
-
+async function finalizarInspeccion(){
+if(!estadoActual)return alert("Seleccione el estado del parámetro.");
+if(guardando)return;
+try{
+const id=await guardarEnSupabase();
+$("pantallaParametros").classList.add("oculto");
+$("pantallaFinal").classList.remove("oculto");
+$("mensajeFinal").innerHTML=`La inspección fue guardada correctamente.<br><br><b>ID:</b> ${escaparHTML(id)}`;
+}catch(error){
+alert(error.message||"No se pudo guardar la inspección.");
+}
 }
 
-
-/* =====================================================
-   MOSTRAR FORMULARIO TICKET
-   ===================================================== */
-
-function mostrarFormularioTicket() {
-
-    cargarObservaciones();
-
-
-    obtener(
-        "ticketFecha"
-    ).value =
-        fechaHoy();
-
-
-    obtener(
-        "formularioTicket"
-    ).classList.remove(
-        "oculto"
-    );
-
-}
-
-
-/* =====================================================
-   OCULTAR FORMULARIO TICKET
-   ===================================================== */
-
-function ocultarFormularioTicket() {
-
-    obtener(
-        "formularioTicket"
-    ).classList.add(
-        "oculto"
-    );
-
-}
-
-
-/* =====================================================
-   CARGAR OBSERVACIONES
-   ===================================================== */
-
-function cargarObservaciones() {
-
-    const select =
-        obtener(
-            "ticketObservacion"
-        );
-
-
-    select.innerHTML =
-        "";
-
-
-    const primera =
-        document.createElement(
-            "option"
-        );
-
-
-    primera.value =
-        "";
-
-
-    primera.textContent =
-        "Seleccione una observación";
-
-
-    select.appendChild(
-        primera
-    );
-
-
-    parametros.forEach(
-        parametro => {
-
-            const option =
-                document.createElement(
-                    "option"
-                );
-
-
-            option.value =
-                parametro;
-
-
-            option.textContent =
-                parametro;
-
-
-            select.appendChild(
-                option
-            );
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   GUARDAR TICKET
-   ===================================================== */
-
-function guardarTicket() {
-
-    const observacion =
-        obtener(
-            "ticketObservacion"
-        ).value;
-
-
-    const descripcion =
-        obtener(
-            "ticketDescripcion"
-        ).value.trim();
-
-
-    const numero =
-        obtener(
-            "ticketNumero"
-        ).value.trim();
-
-
-    const fecha =
-        obtener(
-            "ticketFecha"
-        ).value;
-
-
-    if (!observacion) {
-
-        alert(
-            "Seleccione la observación."
-        );
-
-        return;
-
-    }
-
-
-    if (!descripcion) {
-
-        alert(
-            "Ingrese la descripción."
-        );
-
-        return;
-
-    }
-
-
-    if (!numero) {
-
-        alert(
-            "Ingrese el número de ticket."
-        );
-
-        return;
-
-    }
-
-
-    if (!fecha) {
-
-        alert(
-            "Ingrese la fecha de solicitud."
-        );
-
-        return;
-
-    }
-
-
-    inspeccion.tickets.push({
-
-        parametro:
-            parametros[indiceParametro],
-
-        observacion:
-            observacion,
-
-        descripcion:
-            descripcion,
-
-        numero_ticket:
-            numero,
-
-        fecha_solicitud:
-            fecha
-
-    });
-
-
-    obtener(
-        "ticketObservacion"
-    ).value = "";
-
-
-    obtener(
-        "ticketDescripcion"
-    ).value = "";
-
-
-    obtener(
-        "ticketNumero"
-    ).value = "";
-
-
-    ocultarFormularioTicket();
-
-
-    mostrarTickets();
-
-}
-
-
-/* =====================================================
-   MOSTRAR TICKETS
-   ===================================================== */
-
-function mostrarTickets() {
-
-    const contenedor =
-        obtener(
-            "listaTickets"
-        );
-
-
-    contenedor.innerHTML =
-        "";
-
-
-    const parametroActual =
-        parametros[indiceParametro];
-
-
-    const tickets =
-        inspeccion.tickets.filter(
-            ticket =>
-                ticket.parametro ===
-                parametroActual
-        );
-
-
-    if (
-        tickets.length === 0
-    ) {
-
-        contenedor.innerHTML =
-            "<p>No hay tickets registrados para este parámetro.</p>";
-
-        return;
-
-    }
-
-
-    tickets.forEach(
-        ticket => {
-
-            const div =
-                document.createElement(
-                    "div"
-                );
-
-
-            div.className =
-                "ticket";
-
-
-            const titulo =
-                document.createElement(
-                    "strong"
-                );
-
-
-            titulo.textContent =
-                "Ticket: " +
-                ticket.numero_ticket;
-
-
-            const p1 =
-                document.createElement(
-                    "p"
-                );
-
-
-            p1.innerHTML =
-                "<b>Observación:</b> " +
-                escaparHTML(
-                    ticket.observacion
-                );
-
-
-            const p2 =
-                document.createElement(
-                    "p"
-                );
-
-
-            p2.innerHTML =
-                "<b>Descripción:</b> " +
-                escaparHTML(
-                    ticket.descripcion
-                );
-
-
-            const p3 =
-                document.createElement(
-                    "p"
-                );
-
-
-            p3.innerHTML =
-                "<b>Fecha:</b> " +
-                escaparHTML(
-                    ticket.fecha_solicitud
-                );
-
-
-            div.appendChild(
-                titulo
-            );
-
-            div.appendChild(
-                p1
-            );
-
-            div.appendChild(
-                p2
-            );
-
-            div.appendChild(
-                p3
-            );
-
-
-            contenedor.appendChild(
-                div
-            );
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   SEGURIDAD PARA TEXTO DE TICKETS
-   ===================================================== */
-
-function escaparHTML(
-    texto
-) {
-
-    return String(texto)
-
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-
-        .replace(
-            /</g,
-            "&lt;"
-        )
-
-        .replace(
-            />/g,
-            "&gt;"
-        )
-
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
-}
-
-
-/* =====================================================
-   FINALIZAR
-   ===================================================== */
-
-function finalizarInspeccion() {
-
-    console.log(
-        "================================="
-    );
-
-    console.log(
-        "INSPECCIÓN COMPLETA"
-    );
-
-    console.log(
-        inspeccion
-    );
-
-    console.log(
-        "RESULTADOS:",
-        inspeccion.resultados
-    );
-
-    console.log(
-        "TICKETS:",
-        inspeccion.tickets
-    );
-
-
-    obtener(
-        "pantallaParametros"
-    ).classList.add(
-        "oculto"
-    );
-
-
-    obtener(
-        "pantallaFinal"
-    ).classList.remove(
-        "oculto"
-    );
-
-}
-
-
-/* =====================================================
-   CANCELAR TICKET
-   ===================================================== */
-
-function cancelarTicket() {
-
-    ocultarFormularioTicket();
-
-}
-
-
-/* =====================================================
-   NUEVA INSPECCIÓN
-   ===================================================== */
-
-function nuevaInspeccion() {
-
-    location.reload();
-
-}
-
-
-/* =====================================================
-   EVENTOS DE LOS BOTONES
-   ===================================================== */
-
-obtener(
-    "btnIniciar"
-).addEventListener(
-    "click",
-    iniciarInspeccion
-);
-
-
-obtener(
-    "btnCumple"
-).addEventListener(
-    "click",
-    function() {
-
-        seleccionarEstado(
-            "Cumple"
-        );
-
-    }
-);
-
-
-obtener(
-    "btnNoCumple"
-).addEventListener(
-    "click",
-    function() {
-
-        seleccionarEstado(
-            "No Cumple"
-        );
-
-    }
-);
-
-
-obtener(
-    "btnNoAplica"
-).addEventListener(
-    "click",
-    function() {
-
-        seleccionarEstado(
-            "No Aplica"
-        );
-
-    }
-);
-
-
-obtener(
-    "btnSiguiente"
-).addEventListener(
-    "click",
-    siguienteParametro
-);
-
-
-obtener(
-    "btnAnterior"
-).addEventListener(
-    "click",
-    anteriorParametro
-);
-
-
-obtener(
-    "btnAgregarTicket"
-).addEventListener(
-    "click",
-    mostrarFormularioTicket
-);
-
-
-obtener(
-    "btnGuardarTicket"
-).addEventListener(
-    "click",
-    guardarTicket
-);
-
-
-obtener(
-    "btnCancelarTicket"
-).addEventListener(
-    "click",
-    cancelarTicket
-);
-
-
-obtener(
-    "btnNuevaInspeccion"
-).addEventListener(
-    "click",
-    nuevaInspeccion
-);
-
-
-/* =====================================================
-   INICIAR APLICACIÓN
-   ===================================================== */
-
-async function iniciarAplicacion() {
-
-    console.log(
-        "================================="
-    );
-
-    console.log(
-        "APLICACIÓN INICIADA"
-    );
-
-
-    await cargarParametros();
-
-
-    console.log(
-        "Aplicación lista."
-    );
-
-}
-
-
-iniciarAplicacion();
-
+function cancelarTicket(){ocultarFormularioTicket()}
+function nuevaInspeccion(){location.reload()}
+
+$("btnIniciar").addEventListener("click",iniciarInspeccion);
+$("btnCumple").addEventListener("click",()=>seleccionarEstado("Cumple"));
+$("btnNoCumple").addEventListener("click",()=>seleccionarEstado("No Cumple"));
+$("btnNoAplica").addEventListener("click",()=>seleccionarEstado("No Aplica"));
+$("btnSiguiente").addEventListener("click",siguienteParametro);
+$("btnAnterior").addEventListener("click",anteriorParametro);
+$("btnAgregarTicket").addEventListener("click",mostrarFormularioTicket);
+$("btnGuardarTicket").addEventListener("click",guardarTicket);
+$("btnCancelarTicket").addEventListener("click",cancelarTicket);
+$("btnNuevaInspeccion").addEventListener("click",nuevaInspeccion);
+
+(async function(){
+console.log("Aplicación iniciada");
+await cargarParametros();
+})();
 </script>
-
-
 </body>
-
 </html>
