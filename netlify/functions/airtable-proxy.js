@@ -1,54 +1,63 @@
-exports.handler = async (event, context) => {
-  const AIRTABLE_TOKEN = process.env.AIRTABLE_TOKEN;
-  const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID || "appI8MMDBzZwzLojc";
-
-  if (!AIRTABLE_TOKEN) {
+exports.handler = async (event) => {
+  // 1. Manejo de peticiones CORS pre-flight
+  if (event.httpMethod === "OPTIONS") {
     return {
-      statusCode: 500,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ error: "AIRTABLE_TOKEN no configurado en Netlify" }),
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      },
+      body: "",
     };
   }
 
-  // Obtener la tabla desde la URL o usar 'Parametro' por defecto si no se especifica
-  const queryParams = event.queryStringParameters || {};
-  const table = queryParams.table || "Parametro";
+  // 2. Credenciales y constantes
+  const token = process.env.AIRTABLE_TOKEN;
+  const baseId = process.env.AIRTABLE_BASE_ID || "appI8MMDBzZwzLojc";
   
-  delete queryParams.table; // Eliminar para no duplicar en la URL de Airtable
+  // 3. Extracción de parámetros y tabla destino
+  const params = event.queryStringParameters || {};
+  const tableName = params.table || "Parametro";
 
-  let url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(table)}`;
-  const searchParams = new URLSearchParams(queryParams);
-  if (searchParams.toString()) {
-    url += `?${searchParams.toString()}`;
-  }
+  // 4. Limpieza de la URL para la API de Airtable
+  const searchParams = new URLSearchParams();
+  Object.keys(params).forEach(key => {
+    if (key !== "table") searchParams.append(key, params[key]);
+  });
+
+  const queryString = searchParams.toString();
+  const airtableUrl = `https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}${queryString ? '?' + queryString : ''}`;
 
   try {
-    const response = await fetch(url, {
+    // 5. Petición directa a Airtable con token limpio (.trim)
+    const response = await fetch(airtableUrl, {
       method: event.httpMethod,
       headers: {
-        "Authorization": `Bearer ${AIRTABLE_TOKEN}`,
+        "Authorization": `Bearer ${token ? token.trim() : ''}`,
         "Content-Type": "application/json",
       },
-      body: event.body ? event.body : undefined,
+      body: event.body || undefined,
     });
 
-    const data = await response.text();
+    const responseData = await response.text();
 
     return {
       statusCode: response.status,
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
       },
-      body: data,
+      body: responseData,
     };
-  } catch (error) {
+  } catch (err) {
     return {
       statusCode: 500,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ error: error.message }),
+      headers: { 
+        "Content-Type": "application/json", 
+        "Access-Control-Allow-Origin": "*" 
+      },
+      body: JSON.stringify({ error: err.message }),
     };
   }
 };
