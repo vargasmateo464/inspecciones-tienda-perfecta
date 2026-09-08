@@ -462,8 +462,6 @@ hr {
      SUPABASE
 ===================================================== -->
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
 "use strict";
 
@@ -476,7 +474,7 @@ hr {
    Pega aquí tu NUEVO Personal Access Token.
    No lo compartas en el chat.
 */
-const AIRTABLE_TOKEN = "patnXT8TPE2phg3K8.7c14b328f1ac9e666961a3f0e98c77b8679bd92435ea800bade38884f61f9102";
+const AIRTABLE_TOKEN = "patnXT8TPE2phg3K8.02e5a5e1b31c417f0e06665d52af078cee5588754f37bf0334d8f3af32a65608";
 
 const AIRTABLE_BASE_ID = "appI8MMDBzZwzLojc";
 
@@ -535,7 +533,7 @@ function escaparHTML(texto) {
 
 async function airtableRequest(table, options = {}) {
 
-    if (!AIRTABLE_TOKEN || AIRTABLE_TOKEN === "PEGA_AQUI_TU_NUEVO_TOKEN") {
+    if (!AIRTABLE_TOKEN || AIRTABLE_TOKEN === "PEGA_AQUI_EL_TOKEN_COMPLETO") {
         throw new Error("Falta colocar el Personal Access Token de Airtable.");
     }
 
@@ -610,10 +608,46 @@ async function cargarParametros() {
                 url += "&offset=" + encodeURIComponent(offset);
             }
 
-            const data = await airtableRequest(AIRTABLE_TABLES.parametros, {
-                method: "GET",
-                headers: {}
-            });
+            let response;
+
+            try {
+                response = await fetch(url, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": "Bearer " + AIRTABLE_TOKEN
+                    }
+                });
+            } catch (error) {
+                throw new Error(
+                    "No se pudo conectar con Airtable.\n\n" +
+                    "Detalle: " + error.message
+                );
+            }
+
+            const texto = await response.text();
+            let data = {};
+
+            try {
+                data = texto ? JSON.parse(texto) : {};
+            } catch {
+                data = {};
+            }
+
+            if (!response.ok) {
+                let detalle = "";
+
+                if (data.error) {
+                    detalle = typeof data.error === "string"
+                        ? data.error
+                        : (data.error.message || data.error.type || JSON.stringify(data.error));
+                } else {
+                    detalle = texto || "Respuesta vacía de Airtable.";
+                }
+
+                throw new Error(
+                    "Airtable respondió con HTTP " + response.status + ".\n\n" + detalle
+                );
+            }
 
             todos = todos.concat(data.records || []);
             offset = data.offset || null;
