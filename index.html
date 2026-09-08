@@ -3,38 +3,186 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Check List de Inspección de Seguridad</title>
 
 <style>
-* { box-sizing: border-box; }
-body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #f3f4f6; color: #111827; }
-.app { max-width: 720px; margin: auto; min-height: 100vh; background: white; box-shadow: 0 0 20px rgba(0,0,0,.08); }
-header { background: #1f2937; color: white; padding: 20px; text-align: center; }
-header h1 { margin: 0; font-size: 22px; }
-.contenido { padding: 20px; }
-h2 { margin-top: 0; }
-label { display: block; font-weight: bold; margin: 14px 0 6px; }
-input, select, textarea { width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 16px; }
-textarea { min-height: 100px; resize: vertical; }
-button { width: 100%; padding: 14px; border: 0; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
-button:disabled { opacity: .6; cursor: not-allowed; }
-.btn-principal { background: #2563eb; color: white; }
-.btn-principal:hover { background: #1d4ed8; }
-.btn-secundario { background: #e5e7eb; color: #111827; }
-.btn-ticket { background: #111827; color: white; margin-top: 15px; }
-.estados { display: grid; gap: 10px; margin-top: 18px; }
-.estado { padding: 17px; border: 2px solid #ddd; border-radius: 10px; background: white; font-size: 17px; font-weight: bold; }
-.estado.seleccionado { border-color: #2563eb; background: #eff6ff; }
-.contador { text-align: center; color: #666; margin-bottom: 10px; }
-.parametro { font-size: 20px; font-weight: bold; line-height: 1.4; margin: 20px 0; }
-.ticket { border: 1px solid #ddd; border-radius: 10px; padding: 14px; margin-top: 12px; background: #fafafa; }
-.ticket strong { display: block; margin-bottom: 5px; }
-.ticket p { margin: 6px 0; }
-.oculto { display: none !important; }
-.acciones { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
-.estado-conexion { text-align: center; font-size: 13px; color: #666; margin-top: 10px; }
-.mensaje { padding: 15px; border-radius: 8px; margin-top: 15px; background: #ecfdf5; color: #065f46; }
-hr { border: 0; border-top: 1px solid #ddd; margin: 20px 0; }
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f3f4f6;
+    color: #111827;
+}
+
+.app {
+    max-width: 720px;
+    margin: auto;
+    min-height: 100vh;
+    background: white;
+    box-shadow: 0 0 20px rgba(0,0,0,.08);
+}
+
+header {
+    background: #1f2937;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.contenido {
+    padding: 20px;
+}
+
+h2 {
+    margin-top: 0;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin: 14px 0 6px;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    border: 0;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+.btn-principal {
+    background: #2563eb;
+    color: white;
+}
+
+.btn-principal:hover {
+    background: #1d4ed8;
+}
+
+.btn-secundario {
+    background: #e5e7eb;
+    color: #111827;
+}
+
+.btn-ticket {
+    background: #111827;
+    color: white;
+    margin-top: 15px;
+}
+
+.estados {
+    display: grid;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.estado {
+    padding: 17px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    background: white;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.estado.seleccionado {
+    border-color: #2563eb;
+    background: #eff6ff;
+}
+
+.contador {
+    text-align: center;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.parametro {
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 1.4;
+    margin: 20px 0;
+}
+
+.ticket {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 14px;
+    margin-top: 12px;
+    background: #fafafa;
+}
+
+.ticket strong {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.ticket p {
+    margin: 6px 0;
+}
+
+.oculto {
+    display: none !important;
+}
+
+.acciones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.estado-conexion {
+    text-align: center;
+    font-size: 13px;
+    color: #666;
+    margin-top: 10px;
+}
+
+.mensaje {
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+    background: #ecfdf5;
+    color: #065f46;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #ddd;
+    margin: 20px 0;
+}
 </style>
 </head>
 
@@ -43,106 +191,304 @@ hr { border: 0; border-top: 1px solid #ddd; margin: 20px 0; }
 <div class="app">
 
 <header>
-    <h1>CHECK LIST DE INSPECCIÓN DE SEGURIDAD</h1>
+    <h1>CHECK LIST DE INSPECCIÓN DE SEGURIDAD</h1>
 </header>
 
 <div class="contenido">
 
-<!-- PANTALLA INICIAL -->
+<!-- =====================================================
+     PANTALLA INICIAL
+===================================================== -->
+
 <section id="pantallaInicio">
-    <h2>Nueva inspección</h2>
 
-    <label for="fechaInspeccion">Fecha de inspección</label>
-    <input type="date" id="fechaInspeccion">
+    <h2>Nueva inspección</h2>
 
-    <label for="horaInspeccion">Hora de inspección</label>
-    <input type="time" id="horaInspeccion">
+    <label for="fechaInspeccion">
+        Fecha de inspección
+    </label>
 
-    <label for="bodega">Bodega</label>
-    <input type="text" id="bodega" placeholder="Ingrese la bodega">
+    <input
+        type="date"
+        id="fechaInspeccion"
+    >
 
-    <label for="inspector">Nombre del inspector</label>
-    <input type="text" id="inspector" placeholder="Ingrese el nombre del inspector">
+    <label for="horaInspeccion">
+        Hora de inspección
+    </label>
 
-    <label for="regente">Nombre del regente o encargado del área</label>
-    <input type="text" id="regente" placeholder="Ingrese el nombre del regente o encargado">
+    <input
+        type="time"
+        id="horaInspeccion"
+    >
 
-    <button type="button" class="btn-principal" id="btnIniciar" style="margin-top:20px;">
-        INICIAR INSPECCIÓN
-    </button>
+    <label for="bodega">
+        Bodega
+    </label>
 
-    <div id="estadoConexion" class="estado-conexion">
-        Conectando con la base de datos...
-    </div>
+    <input
+        type="text"
+        id="bodega"
+        placeholder="Ingrese la bodega"
+    >
+
+    <label for="inspector">
+        Nombre del inspector
+    </label>
+
+    <input
+        type="text"
+        id="inspector"
+        placeholder="Ingrese el nombre del inspector"
+    >
+
+    <label for="regente">
+        Nombre del regente o encargado del área
+    </label>
+
+    <input
+        type="text"
+        id="regente"
+        placeholder="Ingrese el nombre del regente o encargado"
+    >
+
+    <button
+        type="button"
+        class="btn-principal"
+        id="btnIniciar"
+        style="margin-top:20px;"
+    >
+        INICIAR INSPECCIÓN
+    </button>
+
+    <div
+        id="estadoConexion"
+        class="estado-conexion"
+    >
+        Conectando con la base de datos...
+    </div>
+
 </section>
 
-<!-- PANTALLA DE PARÁMETROS -->
-<section id="pantallaParametros" class="oculto">
-    <div id="contador" class="contador"></div>
-    <div id="nombreParametro" class="parametro"></div>
 
-    <div class="estados">
-        <button type="button" class="estado" id="btnCumple">🟢 CUMPLE</button>
-        <button type="button" class="estado" id="btnNoCumple">🔴 NO CUMPLE</button>
-        <button type="button" class="estado" id="btnNoAplica">🟡 NO APLICA</button>
-    </div>
+<!-- =====================================================
+     PANTALLA DE PARÁMETROS
+===================================================== -->
 
-    <label for="observacionParametro">Observación</label>
-    <textarea id="observacionParametro" placeholder="Escriba aquí la observación del parámetro"></textarea>
+<section
+    id="pantallaParametros"
+    class="oculto"
+>
 
-    <button type="button" class="btn-ticket" id="btnAgregarTicket">+ AGREGAR TICKET</button>
+    <div
+        id="contador"
+        class="contador"
+    ></div>
 
-    <div id="listaTickets"></div>
+    <div
+        id="nombreParametro"
+        class="parametro"
+    ></div>
 
-    <div id="formularioTicket" class="oculto">
-        <hr>
-        <h3>Nuevo ticket</h3>
-        <label for="ticketDescripcion">Descripción</label>
-        <textarea id="ticketDescripcion" placeholder="Escriba la descripción del ticket"></textarea>
 
-        <label for="ticketNumero">Número de ticket</label>
-        <input type="text" id="ticketNumero" placeholder="Ejemplo: STT-36816">
+    <!-- ESTADOS -->
 
-        <label for="ticketFecha">Fecha de solicitud</label>
-        <input type="date" id="ticketFecha">
+    <div class="estados">
 
-        <button type="button" class="btn-principal" id="btnGuardarTicket" style="margin-top:15px;">GUARDAR TICKET</button>
-        <button type="button" class="btn-secundario" id="btnCancelarTicket" style="margin-top:8px;">CANCELAR</button>
-    </div>
+        <button
+            type="button"
+            class="estado"
+            id="btnCumple"
+        >
+            🟢 CUMPLE
+        </button>
 
-    <div class="acciones">
-        <button type="button" class="btn-secundario" id="btnAnterior">← ANTERIOR</button>
-        <button type="button" class="btn-principal" id="btnSiguiente">SIGUIENTE →</button>
-    </div>
+        <button
+            type="button"
+            class="estado"
+            id="btnNoCumple"
+        >
+            🔴 NO CUMPLE
+        </button>
+
+        <button
+            type="button"
+            class="estado"
+            id="btnNoAplica"
+        >
+            🟡 NO APLICA
+        </button>
+
+    </div>
+
+
+    <!-- OBSERVACIÓN DEL PARÁMETRO -->
+
+    <label for="observacionParametro">Observación</label>
+
+    <textarea
+        id="observacionParametro"
+        placeholder="Escriba aquí la observación del parámetro"
+    ></textarea>
+
+
+    <!-- TICKET -->
+
+    <button
+        type="button"
+        class="btn-ticket"
+        id="btnAgregarTicket"
+    >
+        + AGREGAR TICKET
+    </button>
+
+
+    <div id="listaTickets"></div>
+    <!-- FORMULARIO TICKET -->
+
+    <div
+        id="formularioTicket"
+        class="oculto"
+    >
+
+        <hr>
+
+        <h3>Nuevo ticket</h3>
+
+        <label for="ticketDescripcion">Descripción</label>
+
+        <textarea
+            id="ticketDescripcion"
+            placeholder="Escriba la descripción del ticket"
+        ></textarea>
+
+        <label for="ticketNumero">Número de ticket</label>
+
+        <input
+            type="text"
+            id="ticketNumero"
+            placeholder="Ejemplo: STT-36816"
+        >
+
+        <label for="ticketFecha">Fecha de solicitud</label>
+
+        <input
+            type="date"
+            id="ticketFecha"
+        >
+
+        <button
+            type="button"
+            class="btn-principal"
+            id="btnGuardarTicket"
+            style="margin-top:15px;"
+        >
+            GUARDAR TICKET
+        </button>
+
+        <button
+            type="button"
+            class="btn-secundario"
+            id="btnCancelarTicket"
+            style="margin-top:8px;"
+        >
+            CANCELAR
+        </button>
+
+    </div>
+
+
+    <!-- NAVEGACIÓN -->
+
+    <div class="acciones">
+
+        <button
+            type="button"
+            class="btn-secundario"
+            id="btnAnterior"
+        >
+            ← ANTERIOR
+        </button>
+
+        <button
+            type="button"
+            class="btn-principal"
+            id="btnSiguiente"
+        >
+            SIGUIENTE →
+        </button>
+
+    </div>
+
 </section>
 
-<!-- PANTALLA FINAL -->
-<section id="pantallaFinal" class="oculto">
-    <h2>Inspección terminada</h2>
-    <div class="mensaje">La inspección fue guardada correctamente en la base de datos.</div>
-    <button type="button" class="btn-principal" id="btnNuevaInspeccion" style="margin-top:20px;">NUEVA INSPECCIÓN</button>
+
+<!-- =====================================================
+     PANTALLA FINAL
+===================================================== -->
+
+<section
+    id="pantallaFinal"
+    class="oculto"
+>
+
+    <h2>
+        Inspección terminada
+    </h2>
+
+    <div class="mensaje">
+
+        La inspección fue guardada correctamente
+        en la base de datos.
+
+    </div>
+
+    <button
+        type="button"
+        class="btn-principal"
+        id="btnNuevaInspeccion"
+        style="margin-top:20px;"
+    >
+        NUEVA INSPECCIÓN
+    </button>
+
 </section>
 
 </div>
 </div>
+
+
+<!-- =====================================================
+     SUPABASE
+===================================================== -->
 
 <script>
 "use strict";
 
 /* =====================================================
-   CONFIGURACIÓN AIRTABLE
-   ===================================================== */
-// COLOCA AQUÍ TU NUEVO PERSONAL ACCESS TOKEN GENERADO EN AIRTABLE
-const AIRTABLE_TOKEN = "patnXT8TPE2phg3K8.ff4f827ed61b844ecfece655bc506848bdeddea77ef76898abb00a83fd6fe755"; 
+   CONFIGURACIÓN AIRTABLE
+   ===================================================== */
+
+/*
+   IMPORTANTE:
+   Pega aquí tu NUEVO Personal Access Token.
+   No lo compartas en el chat.
+*/
+const AIRTABLE_TOKEN = "patnXT8TPE2phg3K8.ff4f827ed61b844ecfece655bc506848bdeddea77ef76898abb00a83fd6fe755";
 
 const AIRTABLE_BASE_ID = "appI8MMDBzZwzLojc";
 
 const AIRTABLE_TABLES = {
-    inspecciones: "Inspecciones",
-    resultados: "Resultados",
-    tickets: "Tickets",
-    parametros: "Parametro"
+    inspecciones: "Inspecciones",
+    resultados: "Resultados",
+    tickets: "Tickets",
+    parametros: "Parametro"
 };
+
+
+/* =====================================================
+   VARIABLES
+   ===================================================== */
 
 let parametros = [];
 let indiceParametro = 0;
@@ -150,352 +496,783 @@ let estadoActual = null;
 let idInspeccion = null;
 
 let inspeccion = {
-    fecha: "",
-    hora: "",
-    bodega: "",
-    inspector: "",
-    regente: "",
-    resultados: [],
-    tickets: []
+    fecha: "",
+    hora: "",
+    bodega: "",
+    inspector: "",
+    regente: "",
+    resultados: [],
+    tickets: []
 };
 
-function obtener(id) { return document.getElementById(id); }
-function fechaHoy() { return new Date().toISOString().split("T")[0]; }
-function horaActual() { return new Date().toTimeString().slice(0, 5); }
+
+/* =====================================================
+   FUNCIONES AUXILIARES
+   ===================================================== */
+
+function obtener(id) {
+    return document.getElementById(id);
+}
+
+function fechaHoy() {
+    return new Date().toISOString().split("T")[0];
+}
+
+function horaActual() {
+    return new Date().toTimeString().slice(0, 5);
+}
+
 function escaparHTML(texto) {
-    return String(texto ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    return String(texto ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 
 async function airtableRequest(table, options = {}) {
-    if (!AIRTABLE_TOKEN || AIRTABLE_TOKEN === "PEGA_AQUI_TU_NUEVO_TOKEN") {
-        throw new Error("Falta colocar el nuevo Personal Access Token de Airtable.");
-    }
 
-    const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(table)}`;
+    if (!AIRTABLE_TOKEN || AIRTABLE_TOKEN === "PEGA_AQUI_EL_TOKEN_COMPLETO") {
+        throw new Error("Falta colocar el Personal Access Token de Airtable.");
+    }
 
-    const response = await fetch(url, {
-        ...options,
-        headers: {
-            "Authorization": "Bearer " + AIRTABLE_TOKEN,
-            "Content-Type": "application/json",
-            ...(options.headers || {})
-        }
-    });
+    const url =
+        "https://api.airtable.com/v0/" +
+        AIRTABLE_BASE_ID +
+        "/" +
+        encodeURIComponent(table);
 
-    const texto = await response.text();
-    let data = {};
-    try { data = texto ? JSON.parse(texto) : {}; } catch { data = { error: { message: texto } }; }
+    const response = await fetch(url, {
+        ...options,
+        headers: {
+            "Authorization": "Bearer " + AIRTABLE_TOKEN,
+            "Content-Type": "application/json",
+            ...(options.headers || {})
+        }
+    });
 
-    if (!response.ok) {
-        throw new Error(data?.error?.message || `Error ${response.status} al comunicarse con Airtable.`);
-    }
+    const texto = await response.text();
 
-    return data;
+    let data = {};
+    try {
+        data = texto ? JSON.parse(texto) : {};
+    } catch {
+        data = { error: { message: texto } };
+    }
+
+    if (!response.ok) {
+        console.error("ERROR AIRTABLE:", data);
+        throw new Error(
+            data?.error?.message ||
+            "Error " + response.status + " al comunicarse con Airtable."
+        );
+    }
+
+    return data;
 }
+
+
+/* =====================================================
+   FECHA Y HORA AUTOMÁTICAS
+   ===================================================== */
 
 obtener("fechaInspeccion").value = fechaHoy();
 obtener("horaInspeccion").value = horaActual();
 obtener("ticketFecha").value = fechaHoy();
 
+
+/* =====================================================
+   CARGAR PARÁMETROS DESDE AIRTABLE
+   ===================================================== */
+
 async function cargarParametros() {
-    const estado = obtener("estadoConexion");
-    try {
-        let todos = [];
-        let offset = null;
 
-        do {
-            let url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLES.parametros)}?pageSize=100`;
-            if (offset) url += "&offset=" + encodeURIComponent(offset);
+    const estado = obtener("estadoConexion");
 
-            const response = await fetch(url, {
-                headers: { "Authorization": "Bearer " + AIRTABLE_TOKEN }
-            });
+    try {
 
-            const data = await response.json();
-            if (!response.ok) throw new Error(data?.error?.message || "Error al cargar parámetros.");
+        let todos = [];
+        let offset = null;
 
-            todos = todos.concat(data.records || []);
-            offset = data.offset || null;
-        } while (offset);
+        do {
 
-        parametros = todos
-            .filter(record => {
-                const activo = record.fields["Activo"];
-                return activo === true || activo === 1 || activo === "true";
-            })
-            .sort((a, b) => Number(a.fields["Orden"] ?? 999999) - Number(b.fields["Orden"] ?? 999999))
-            .map(record => ({
-                id: record.id,
-                nombre: record.fields["Parámetro"] || record.fields["Parametro"] || ""
-            }))
-            .filter(x => x.nombre);
+            let url =
+                "https://api.airtable.com/v0/" +
+                AIRTABLE_BASE_ID +
+                "/" +
+                encodeURIComponent(AIRTABLE_TABLES.parametros) +
+                "?pageSize=100";
 
-        if (parametros.length === 0) throw new Error("La tabla Parametro no tiene registros activos.");
+            if (offset) {
+                url += "&offset=" + encodeURIComponent(offset);
+            }
 
-        estado.innerText = "✓ Conectado a Airtable";
-    } catch (error) {
-        console.error(error);
-        estado.innerText = "❌ Error de conexión con Airtable";
-    }
+            let response;
+
+            try {
+                response = await fetch(url, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": "Bearer " + AIRTABLE_TOKEN
+                    }
+                });
+            } catch (error) {
+                throw new Error(
+                    "No se pudo conectar con Airtable.\n\n" +
+                    "Detalle: " + error.message
+                );
+            }
+
+            const texto = await response.text();
+            let data = {};
+
+            try {
+                data = texto ? JSON.parse(texto) : {};
+            } catch {
+                data = {};
+            }
+
+            if (!response.ok) {
+                let detalle = "";
+
+                if (data.error) {
+                    detalle = typeof data.error === "string"
+                        ? data.error
+                        : (data.error.message || data.error.type || JSON.stringify(data.error));
+                } else {
+                    detalle = texto || "Respuesta vacía de Airtable.";
+                }
+
+                throw new Error(
+                    "Airtable respondió con HTTP " + response.status + ".\n\n" + detalle
+                );
+            }
+
+            todos = todos.concat(data.records || []);
+            offset = data.offset || null;
+
+        } while (offset);
+
+        parametros = todos
+            .filter(record => {
+                const activo = record.fields["Activo"];
+                return activo === true || activo === 1 || activo === "true";
+            })
+            .sort((a, b) => {
+                const ordenA = Number(a.fields["Orden"] ?? 999999);
+                const ordenB = Number(b.fields["Orden"] ?? 999999);
+                return ordenA - ordenB;
+            })
+            .map(record => ({
+                id: record.id,
+                nombre: record.fields["Parámetro"] || record.fields["Parametro"] || ""
+            }))
+            .filter(x => x.nombre);
+
+        if (parametros.length === 0) {
+            throw new Error(
+                "La tabla Parametro no tiene parámetros activos."
+            );
+        }
+
+        estado.innerText = "✓ Conectado a Airtable";
+
+        console.log("PARÁMETROS:", parametros);
+
+    } catch (error) {
+
+        console.error(error);
+
+        estado.innerText = "❌ Error de conexión con Airtable";
+
+        alert(
+            "No se pudieron cargar los parámetros desde Airtable.\n\n" +
+            error.message
+        );
+    }
 }
+
+
+/* =====================================================
+   INICIAR INSPECCIÓN
+   ===================================================== */
 
 async function iniciarInspeccion() {
-    const fecha = obtener("fechaInspeccion").value;
-    const hora = obtener("horaInspeccion").value;
-    const bodega = obtener("bodega").value.trim();
-    const inspector = obtener("inspector").value.trim();
-    const regente = obtener("regente").value.trim();
 
-    if (!fecha || !hora || !bodega || !inspector || !regente) {
-        alert("Por favor complete todos los campos iniciales.");
-        return;
-    }
+    const fecha = obtener("fechaInspeccion").value;
+    const hora = obtener("horaInspeccion").value;
+    const bodega = obtener("bodega").value.trim();
+    const inspector = obtener("inspector").value.trim();
+    const regente = obtener("regente").value.trim();
 
-    const boton = obtener("btnIniciar");
-    boton.disabled = true;
-    boton.innerText = "GUARDANDO INSPECCIÓN...";
+    if (!fecha) {
+        alert("Ingrese la fecha de inspección.");
+        return;
+    }
 
-    try {
-        const data = await airtableRequest(AIRTABLE_TABLES.inspecciones, {
-            method: "POST",
-            body: JSON.stringify({
-                records: [{
-                    fields: { "Fecha": fecha, "Hora": hora, "Bodega": bodega, "Inspector": inspector, "Regente": regente }
-                }]
-            })
-        });
+    if (!hora) {
+        alert("Ingrese la hora de inspección.");
+        return;
+    }
 
-        idInspeccion = data.records[0].id;
-        inspeccion = { fecha, hora, bodega, inspector, regente, resultados: [], tickets: [] };
-        indiceParametro = 0;
-        estadoActual = null;
+    if (!bodega) {
+        alert("Ingrese la bodega.");
+        return;
+    }
 
-        obtener("pantallaInicio").classList.add("oculto");
-        obtener("pantallaParametros").classList.remove("oculto");
-        mostrarParametro();
-    } catch (error) {
-        alert("Error al iniciar inspección: " + error.message);
-        boton.disabled = false;
-        boton.innerText = "INICIAR INSPECCIÓN";
-    }
+    if (!inspector) {
+        alert("Ingrese el nombre del inspector.");
+        return;
+    }
+
+    if (!regente) {
+        alert("Ingrese el nombre del regente o encargado del área.");
+        return;
+    }
+
+    if (parametros.length === 0) {
+        alert("Todavía no se han cargado los parámetros.");
+        return;
+    }
+
+    const boton = obtener("btnIniciar");
+
+    boton.disabled = true;
+    boton.innerText = "GUARDANDO INSPECCIÓN...";
+
+    try {
+
+        const data = await airtableRequest(
+            AIRTABLE_TABLES.inspecciones,
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    records: [
+                        {
+                            fields: {
+                                "Fecha": fecha,
+                                "Hora": hora,
+                                "Bodega": bodega,
+                                "Inspector": inspector,
+                                "Regente": regente
+                            }
+                        }
+                    ]
+                })
+            }
+        );
+
+        idInspeccion = data.records[0].id;
+
+        inspeccion = {
+            fecha,
+            hora,
+            bodega,
+            inspector,
+            regente,
+            resultados: [],
+            tickets: []
+        };
+
+        indiceParametro = 0;
+        estadoActual = null;
+
+        obtener("pantallaInicio").classList.add("oculto");
+        obtener("pantallaParametros").classList.remove("oculto");
+
+        mostrarParametro();
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "No se pudo crear la inspección en Airtable.\n\n" +
+            error.message
+        );
+
+        boton.disabled = false;
+        boton.innerText = "INICIAR INSPECCIÓN";
+    }
 }
+
+
+/* =====================================================
+   MOSTRAR PARÁMETRO
+   ===================================================== */
 
 function mostrarParametro() {
-    if (parametros.length === 0) return;
-    const parametro = parametros[indiceParametro];
-    obtener("contador").innerText = `PARÁMETRO ${indiceParametro + 1} DE ${parametros.length}`;
-    obtener("nombreParametro").innerText = parametro.nombre;
 
-    const resultado = inspeccion.resultados.find(r => r.parametroId === parametro.id);
-    estadoActual = resultado ? resultado.estado : null;
-    obtener("observacionParametro").value = resultado ? (resultado.observacion || "") : "";
+    if (parametros.length === 0) return;
 
-    actualizarBotones();
-    mostrarTickets();
-    ocultarFormularioTicket();
+    const parametro = parametros[indiceParametro];
+
+    obtener("contador").innerText =
+        "PARÁMETRO " +
+        (indiceParametro + 1) +
+        " DE " +
+        parametros.length;
+
+    obtener("nombreParametro").innerText = parametro.nombre;
+
+    const resultado = inspeccion.resultados.find(
+        r => r.parametroId === parametro.id
+    );
+
+    estadoActual = resultado ? resultado.estado : null;
+
+    obtener("observacionParametro").value =
+        resultado ? (resultado.observacion || "") : "";
+
+    actualizarBotones();
+    mostrarTickets();
+    ocultarFormularioTicket();
 }
+
+
+/* =====================================================
+   SELECCIONAR ESTADO
+   ===================================================== */
 
 function seleccionarEstado(estado) {
-    estadoActual = estado;
-    const parametro = parametros[indiceParametro];
-    const existente = inspeccion.resultados.find(r => r.parametroId === parametro.id);
 
-    if (existente) {
-        existente.estado = estado;
-    } else {
-        inspeccion.resultados.push({
-            parametroId: parametro.id,
-            parametro: parametro.nombre,
-            estado: estado,
-            observacion: ""
-        });
-    }
-    actualizarBotones();
+    estadoActual = estado;
+
+    const parametro = parametros[indiceParametro];
+
+    const existente = inspeccion.resultados.find(
+        r => r.parametroId === parametro.id
+    );
+
+    if (existente) {
+
+        existente.estado = estado;
+
+    } else {
+
+        inspeccion.resultados.push({
+            parametroId: parametro.id,
+            parametro: parametro.nombre,
+            estado: estado,
+            observacion: ""
+        });
+
+    }
+
+    actualizarBotones();
 }
+
+
+/* =====================================================
+   GUARDAR OBSERVACIÓN LOCALMENTE
+   ===================================================== */
 
 function guardarObservacionActual() {
-    const parametro = parametros[indiceParametro];
-    const observacion = obtener("observacionParametro").value.trim();
-    const existente = inspeccion.resultados.find(r => r.parametroId === parametro.id);
 
-    if (existente) {
-        existente.observacion = observacion;
-    } else if (estadoActual) {
-        inspeccion.resultados.push({
-            parametroId: parametro.id,
-            parametro: parametro.nombre,
-            estado: estadoActual,
-            observacion: observacion
-        });
-    }
+    const parametro = parametros[indiceParametro];
+
+    const observacion =
+        obtener("observacionParametro").value.trim();
+
+    const existente = inspeccion.resultados.find(
+        r => r.parametroId === parametro.id
+    );
+
+    if (existente) {
+
+        existente.observacion = observacion;
+
+    } else if (estadoActual) {
+
+        inspeccion.resultados.push({
+            parametroId: parametro.id,
+            parametro: parametro.nombre,
+            estado: estadoActual,
+            observacion: observacion
+        });
+
+    }
 }
+
+
+/* =====================================================
+   ACTUALIZAR BOTONES
+   ===================================================== */
 
 function actualizarBotones() {
-    obtener("btnCumple").classList.remove("seleccionado");
-    obtener("btnNoCumple").classList.remove("seleccionado");
-    obtener("btnNoAplica").classList.remove("seleccionado");
 
-    if (estadoActual === "Cumple") obtener("btnCumple").classList.add("seleccionado");
-    if (estadoActual === "No Cumple") obtener("btnNoCumple").classList.add("seleccionado");
-    if (estadoActual === "No Aplica") obtener("btnNoAplica").classList.add("seleccionado");
+    obtener("btnCumple").classList.remove("seleccionado");
+    obtener("btnNoCumple").classList.remove("seleccionado");
+    obtener("btnNoAplica").classList.remove("seleccionado");
+
+    if (estadoActual === "Cumple") {
+        obtener("btnCumple").classList.add("seleccionado");
+    }
+
+    if (estadoActual === "No Cumple") {
+        obtener("btnNoCumple").classList.add("seleccionado");
+    }
+
+    if (estadoActual === "No Aplica") {
+        obtener("btnNoAplica").classList.add("seleccionado");
+    }
 }
+
+
+/* =====================================================
+   SIGUIENTE
+   ===================================================== */
 
 async function siguienteParametro() {
-    if (!estadoActual) {
-        alert("Seleccione el estado del parámetro.");
-        return;
-    }
-    guardarObservacionActual();
 
-    if (indiceParametro < parametros.length - 1) {
-        indiceParametro++;
-        mostrarParametro();
-    } else {
-        await finalizarInspeccion();
-    }
+    if (!estadoActual) {
+        alert("Seleccione el estado del parámetro.");
+        return;
+    }
+
+    guardarObservacionActual();
+
+    if (indiceParametro < parametros.length - 1) {
+
+        indiceParametro++;
+        mostrarParametro();
+
+    } else {
+
+        await finalizarInspeccion();
+    }
 }
+
+
+/* =====================================================
+   ANTERIOR
+   ===================================================== */
 
 function anteriorParametro() {
-    guardarObservacionActual();
-    if (indiceParametro > 0) {
-        indiceParametro--;
-        mostrarParametro();
-    }
+
+    guardarObservacionActual();
+
+    if (indiceParametro > 0) {
+        indiceParametro--;
+        mostrarParametro();
+    }
 }
 
+
+/* =====================================================
+   FORMULARIO TICKET
+   ===================================================== */
+
 function mostrarFormularioTicket() {
-    guardarObservacionActual();
-    obtener("ticketFecha").value = fechaHoy();
-    obtener("formularioTicket").classList.remove("oculto");
+
+    guardarObservacionActual();
+
+    obtener("ticketFecha").value = fechaHoy();
+
+    obtener("formularioTicket")
+        .classList.remove("oculto");
 }
 
 function ocultarFormularioTicket() {
-    obtener("formularioTicket").classList.add("oculto");
+
+    obtener("formularioTicket")
+        .classList.add("oculto");
 }
+
+
+/* =====================================================
+   GUARDAR TICKET LOCALMENTE
+   ===================================================== */
 
 function guardarTicket() {
-    const descripcion = obtener("ticketDescripcion").value.trim();
-    const numero = obtener("ticketNumero").value.trim();
-    const fecha = obtener("ticketFecha").value;
 
-    if (!descripcion || !numero || !fecha) {
-        alert("Por favor complete todos los datos del ticket.");
-        return;
-    }
+    const descripcion =
+        obtener("ticketDescripcion").value.trim();
 
-    const parametro = parametros[indiceParametro];
-    inspeccion.tickets.push({
-        parametroId: parametro.id,
-        parametro: parametro.nombre,
-        descripcion,
-        numero_ticket: numero,
-        fecha_solicitud: fecha
-    });
+    const numero =
+        obtener("ticketNumero").value.trim();
 
-    obtener("ticketDescripcion").value = "";
-    obtener("ticketNumero").value = "";
-    ocultarFormularioTicket();
-    mostrarTickets();
+    const fecha =
+        obtener("ticketFecha").value;
+
+    if (!descripcion) {
+        alert("Ingrese la descripción del ticket.");
+        return;
+    }
+
+    if (!numero) {
+        alert("Ingrese el número de ticket.");
+        return;
+    }
+
+    if (!fecha) {
+        alert("Ingrese la fecha de solicitud.");
+        return;
+    }
+
+    const parametro = parametros[indiceParametro];
+
+    inspeccion.tickets.push({
+        parametroId: parametro.id,
+        parametro: parametro.nombre,
+        descripcion,
+        numero_ticket: numero,
+        fecha_solicitud: fecha
+    });
+
+    obtener("ticketDescripcion").value = "";
+    obtener("ticketNumero").value = "";
+
+    ocultarFormularioTicket();
+    mostrarTickets();
 }
+
+
+/* =====================================================
+   MOSTRAR TICKETS
+   ===================================================== */
 
 function mostrarTickets() {
-    const contenedor = obtener("listaTickets");
-    contenedor.innerHTML = "";
-    const parametroActual = parametros[indiceParametro];
 
-    const tickets = inspeccion.tickets.filter(t => t.parametroId === parametroActual.id);
+    const contenedor = obtener("listaTickets");
 
-    if (tickets.length === 0) {
-        contenedor.innerHTML = "<p>No hay tickets registrados para este parámetro.</p>";
-        return;
-    }
+    contenedor.innerHTML = "";
 
-    tickets.forEach(ticket => {
-        const div = document.createElement("div");
-        div.className = "ticket";
-        div.innerHTML = `
-            <strong>Ticket: ${escaparHTML(ticket.numero_ticket)}</strong>
-            <p><b>Descripción:</b> ${escaparHTML(ticket.descripcion)}</p>
-            <p><b>Fecha:</b> ${escaparHTML(ticket.fecha_solicitud)}</p>
-        `;
-        contenedor.appendChild(div);
-    });
+    const parametroActual =
+        parametros[indiceParametro];
+
+    const tickets =
+        inspeccion.tickets.filter(
+            ticket =>
+                ticket.parametroId === parametroActual.id
+        );
+
+    if (tickets.length === 0) {
+
+        contenedor.innerHTML =
+            "<p>No hay tickets registrados para este parámetro.</p>";
+
+        return;
+    }
+
+    tickets.forEach(ticket => {
+
+        const div = document.createElement("div");
+
+        div.className = "ticket";
+
+        div.innerHTML = `
+            <strong>
+                Ticket:
+                ${escaparHTML(ticket.numero_ticket)}
+            </strong>
+
+            <p>
+                <b>Descripción:</b>
+                ${escaparHTML(ticket.descripcion)}
+            </p>
+
+            <p>
+                <b>Fecha:</b>
+                ${escaparHTML(ticket.fecha_solicitud)}
+            </p>
+        `;
+
+        contenedor.appendChild(div);
+    });
 }
+
+
+/* =====================================================
+   FINALIZAR INSPECCIÓN
+   ===================================================== */
 
 async function finalizarInspeccion() {
-    guardarObservacionActual();
 
-    const boton = obtener("btnSiguiente");
-    boton.disabled = true;
-    boton.innerText = "GUARDANDO...";
+    guardarObservacionActual();
 
-    try {
-        const resultadosAirtable = [];
+    if (!idInspeccion) {
+        alert("No existe el ID de la inspección.");
+        return;
+    }
 
-        for (const resultado of inspeccion.resultados) {
-            const data = await airtableRequest(AIRTABLE_TABLES.resultados, {
-                method: "POST",
-                body: JSON.stringify({
-                    records: [{
-                        fields: {
-                            "Inspección": [idInspeccion],
-                            "Parámetro": [resultado.parametroId],
-                            "Estado": resultado.estado,
-                            "Observaciones": resultado.observacion || ""
-                        }
-                    }]
-                })
-            });
-            resultadosAirtable.push({ ...resultado, airtableId: data.records[0].id });
-        }
+    if (inspeccion.resultados.length !== parametros.length) {
+        alert("Hay parámetros sin estado seleccionado.");
+        return;
+    }
 
-        for (const ticket of inspeccion.tickets) {
-            const resultado = resultadosAirtable.find(r => r.parametroId === ticket.parametroId);
-            await airtableRequest(AIRTABLE_TABLES.tickets, {
-                method: "POST",
-                body: JSON.stringify({
-                    records: [{
-                        fields: {
-                            "Resultado": [resultado.airtableId],
-                            "Descripción": ticket.descripcion,
-                            "Número de ticket": ticket.numero_ticket,
-                            "Fecha de solicitud": ticket.fecha_solicitud
-                        }
-                    }]
-                })
-            });
-        }
+    const boton = obtener("btnSiguiente");
 
-        obtener("pantallaParametros").classList.add("oculto");
-        obtener("pantallaFinal").classList.remove("oculto");
-    } catch (error) {
-        alert("Error al finalizar inspección: " + error.message);
-        boton.disabled = false;
-        boton.innerText = "SIGUIENTE →";
-    }
+    boton.disabled = true;
+    boton.innerText = "GUARDANDO...";
+
+    try {
+
+        /* ==========================================
+           1. GUARDAR RESULTADOS
+           ========================================== */
+
+        const resultadosAirtable = [];
+
+        for (const resultado of inspeccion.resultados) {
+
+            const data = await airtableRequest(
+                AIRTABLE_TABLES.resultados,
+                {
+                    method: "POST",
+                    body: JSON.stringify({
+                        records: [
+                            {
+                                fields: {
+                                    "Inspección": [idInspeccion],
+                                    "Parámetro": [resultado.parametroId],
+                                    "Estado": resultado.estado,
+                                    "Observaciones": resultado.observacion || ""
+                                }
+                            }
+                        ]
+                    })
+                }
+            );
+
+            resultadosAirtable.push({
+                ...resultado,
+                airtableId: data.records[0].id
+            });
+        }
+
+        /* ==========================================
+           2. GUARDAR TICKETS
+           ========================================== */
+
+        for (const ticket of inspeccion.tickets) {
+
+            const resultado =
+                resultadosAirtable.find(
+                    r => r.parametroId === ticket.parametroId
+                );
+
+            if (!resultado) {
+                throw new Error(
+                    "No se encontró el resultado para el parámetro: " +
+                    ticket.parametro
+                );
+            }
+
+            await airtableRequest(
+                AIRTABLE_TABLES.tickets,
+                {
+                    method: "POST",
+                    body: JSON.stringify({
+                        records: [
+                            {
+                                fields: {
+                                    "Resultado": [resultado.airtableId],
+                                    "Descripción": ticket.descripcion,
+                                    "Número de ticket": ticket.numero_ticket,
+                                    "Fecha de solicitud": ticket.fecha_solicitud
+                                }
+                            }
+                        ]
+                    })
+                }
+            );
+        }
+
+        console.log("INSPECCIÓN GUARDADA EN AIRTABLE");
+        console.log("INSPECCIÓN:", idInspeccion);
+        console.log("RESULTADOS:", resultadosAirtable);
+        console.log("TICKETS:", inspeccion.tickets);
+
+        obtener("pantallaParametros")
+            .classList.add("oculto");
+
+        obtener("pantallaFinal")
+            .classList.remove("oculto");
+
+    } catch (error) {
+
+        console.error("ERROR GENERAL:", error);
+
+        alert(
+            "Ocurrió un error al guardar la inspección en Airtable:\n\n" +
+            error.message
+        );
+
+        boton.disabled = false;
+        boton.innerText = "SIGUIENTE →";
+    }
 }
 
-function nuevaInspeccion() { location.reload(); }
 
-obtener("btnIniciar").addEventListener("click", iniciarInspeccion);
-obtener("btnCumple").addEventListener("click", () => seleccionarEstado("Cumple"));
-obtener("btnNoCumple").addEventListener("click", () => seleccionarEstado("No Cumple"));
-obtener("btnNoAplica").addEventListener("click", () => seleccionarEstado("No Aplica"));
-obtener("btnSiguiente").addEventListener("click", siguienteParametro);
-obtener("btnAnterior").addEventListener("click", anteriorParametro);
-obtener("btnAgregarTicket").addEventListener("click", mostrarFormularioTicket);
-obtener("btnGuardarTicket").addEventListener("click", guardarTicket);
-obtener("btnCancelarTicket").addEventListener("click", ocultarFormularioTicket);
-obtener("btnNuevaInspeccion").addEventListener("click", nuevaInspeccion);
+/* =====================================================
+   NUEVA INSPECCIÓN
+   ===================================================== */
+
+function nuevaInspeccion() {
+    location.reload();
+}
+
+
+/* =====================================================
+   EVENTOS
+   ===================================================== */
+
+obtener("btnIniciar")
+    .addEventListener("click", iniciarInspeccion);
+
+obtener("btnCumple")
+    .addEventListener(
+        "click",
+        () => seleccionarEstado("Cumple")
+    );
+
+obtener("btnNoCumple")
+    .addEventListener(
+        "click",
+        () => seleccionarEstado("No Cumple")
+    );
+
+obtener("btnNoAplica")
+    .addEventListener(
+        "click",
+        () => seleccionarEstado("No Aplica")
+    );
+
+obtener("btnSiguiente")
+    .addEventListener("click", siguienteParametro);
+
+obtener("btnAnterior")
+    .addEventListener("click", anteriorParametro);
+
+obtener("btnAgregarTicket")
+    .addEventListener("click", mostrarFormularioTicket);
+
+obtener("btnGuardarTicket")
+    .addEventListener("click", guardarTicket);
+
+obtener("btnCancelarTicket")
+    .addEventListener("click", ocultarFormularioTicket);
+
+obtener("btnNuevaInspeccion")
+    .addEventListener("click", nuevaInspeccion);
+
+
+/* =====================================================
+   INICIAR APLICACIÓN
+   ===================================================== */
 
 (async function() {
-    await cargarParametros();
+
+    console.log("APLICACIÓN INICIADA");
+
+    await cargarParametros();
+
+    console.log("APLICACIÓN LISTA");
+
 })();
 </script>
+
 </body>
 </html>
