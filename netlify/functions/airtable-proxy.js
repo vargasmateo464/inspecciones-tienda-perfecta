@@ -5,18 +5,16 @@ exports.handler = async (event, context) => {
   if (!AIRTABLE_TOKEN) {
     return {
       statusCode: 500,
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ error: "AIRTABLE_TOKEN no configurado en Netlify" }),
     };
   }
 
-  const { table, ...queryParams } = event.queryStringParameters || {};
-
-  if (!table) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ error: "Falta el parámetro 'table'" }),
-    };
-  }
+  // Obtener la tabla desde la URL o usar 'Parametro' por defecto si no se especifica
+  const queryParams = event.queryStringParameters || {};
+  const table = queryParams.table || "Parametro";
+  
+  delete queryParams.table; // Eliminar para no duplicar en la URL de Airtable
 
   let url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(table)}`;
   const searchParams = new URLSearchParams(queryParams);
@@ -31,22 +29,25 @@ exports.handler = async (event, context) => {
         "Authorization": `Bearer ${AIRTABLE_TOKEN}`,
         "Content-Type": "application/json",
       },
-      body: event.httpMethod !== "GET" ? event.body : undefined,
+      body: event.body ? event.body : undefined,
     });
 
-    const data = await response.json();
+    const data = await response.text();
 
     return {
       statusCode: response.status,
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
       },
-      body: JSON.stringify(data),
+      body: data,
     };
   } catch (error) {
     return {
       statusCode: 500,
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ error: error.message }),
     };
   }
