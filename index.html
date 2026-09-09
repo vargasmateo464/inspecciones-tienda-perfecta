@@ -122,11 +122,11 @@ hr { border: 0; border-top: 1px solid #ddd; margin: 20px 0; }
 "use strict";
 
 // CONFIGURACIÓN DE SUPABASE
-// Reemplaza estas dos cadenas con tus credenciales de Project Settings > API en Supabase
 const SUPABASE_URL = "https://ncnoavdugmmthipnymbq.supabase.co"; 
-const SUPABASE_ANON_KEY = "sb_secret_kmqNEtTSsPCaqO3YsTK3gA_WH2YJRqe"; 
+const SUPABASE_ANON_KEY = "sb_secret_4wZAE_WRwnW4eblQccXQDg_QEdUkvHB"; // Asegúrate de reemplazarlo con tu anon key real
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Usamos supabaseClient para evitar conflictos de nombres con la librería
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let parametros = [];
 let indiceParametro = 0;
@@ -153,7 +153,7 @@ obtener("ticketFecha").value = fechaHoy();
 async function cargarParametros() {
     const estado = obtener("estadoConexion");
     try {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('parametros')
             .select('id, parametro')
             .eq('activo', true)
@@ -189,7 +189,7 @@ async function iniciarInspeccion() {
     boton.innerText = "GUARDANDO INSPECCIÓN...";
 
     try {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('inspecciones')
             .insert([{ fecha, hora, bodega, inspector, regente }])
             .select();
@@ -353,7 +353,7 @@ async function finalizarInspeccion() {
             observaciones: r.observacion || ""
         }));
 
-        const { data: resultadosGuardados, error: errorResultados } = await supabase
+        const { data: resultadosGuardados, error: errorResultados } = await supabaseClient
             .from('resultados')
             .insert(payloadResultados)
             .select();
@@ -376,7 +376,7 @@ async function finalizarInspeccion() {
             }
 
             if (payloadTickets.length > 0) {
-                const { error: errorTickets } = await supabase
+                const { error: errorTickets } = await supabaseClient
                     .from('tickets')
                     .insert(payloadTickets);
 
