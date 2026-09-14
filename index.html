@@ -40,7 +40,9 @@ button:disabled { opacity: .6; cursor: not-allowed; }
 hr { border: 0; border-top: 1px solid #ddd; margin: 20px 0; }
 .foto-input { border: 1px dashed #2563eb; background: #f8fafc; padding: 10px; border-radius: 8px; cursor: pointer; }
 .previsualizacion-foto { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-start; }
-.previsualizacion-foto img { width: 90px; height: 90px; object-fit: cover; border-radius: 8px; border: 1px solid #ccc; }
+.item-foto { position: relative; display: inline-block; }
+.item-foto img { width: 90px; height: 90px; object-fit: cover; border-radius: 8px; border: 1px solid #ccc; }
+.btn-eliminar-foto { position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; }
 </style>
 </head>
 
@@ -87,9 +89,9 @@ hr { border: 0; border-top: 1px solid #ddd; margin: 20px 0; }
     <label for="observacionParametro">Observación</label>
     <textarea id="observacionParametro" placeholder="Escriba aquí la observación del parámetro"></textarea>
 
-    <!-- CAMPO PARA MÚLTIPLES FOTOS -->
-    <label for="fotoParametro">📸 Fotos del parámetro (Opcional - Puedes seleccionar varias)</label>
-    <input type="file" id="fotoParametro" class="foto-input" accept="image/*" multiple>
+    <!-- INPUT DE FOTOS ACUMULATIVO -->
+    <label for="fotoParametro">📸 Tomar/Adjuntar Foto (Se irán sumando)</label>
+    <input type="file" id="fotoParametro" class="foto-input" accept="image/*" capture="environment" multiple>
     <div id="vistaPreviaFoto" class="previsualizacion-foto"></div>
 
     <button type="button" class="btn-ticket" id="btnAgregarTicket">+ AGREGAR TICKET</button>
@@ -129,9 +131,8 @@ hr { border: 0; border-top: 1px solid #ddd; margin: 20px 0; }
 <script>
 "use strict";
 
-// CONFIGURACIÓN DE SUPABASE
 const SUPABASE_URL = "https://ncnoavdugmmthipnymbq.supabase.co"; 
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5jbm9hdmR1Z21tdGhpcG55bWJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcwODYwNjksImV4cCI6MjEwMjY2MjA2OX0.WAAy6pq7CGncaDOaZdYgi9vn8JwKv8jdVs3glIPUnMc"; // Coloca tu llave real de Supabase
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5jbm9hdmR1Z21tdGhpcG55bWJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcwODYwNjksImV4cCI6MjEwMjY2MjA2OX0.WAAy6pq7CGncaDOaZdYgi9vn8JwKv8jdVs3glIPUnMc"; 
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -139,6 +140,9 @@ let parametros = [];
 let indiceParametro = 0;
 let estadoActual = null;
 let idInspeccion = null;
+
+// ARREGLO PARA ACUMULAR FOTOS DEL PARÁMETRO ACTUAL
+let fotosAcumuladas = [];
 
 let inspeccion = {
     fecha: "", hora: "", bodega: "", inspector: "", regente: "", resultados: [], tickets: []
@@ -167,9 +171,7 @@ async function cargarParametros() {
             .order('orden', { ascending: true });
 
         if (error) throw error;
-
         parametros = data.map(item => ({ id: item.id, nombre: item.parametro }));
-
         if (parametros.length === 0) throw new Error("La tabla parametros no tiene registros activos.");
 
         estado.innerText = "✓ Conectado a Supabase correctamente";
@@ -227,27 +229,57 @@ function mostrarParametro() {
     const resultado = inspeccion.resultados.find(r => r.parametroId === parametro.id);
     estadoActual = resultado ? resultado.estado : null;
     obtener("observacionParametro").value = resultado ? (resultado.observacion || "") : "";
-    obtener("fotoParametro").value = ""; // Limpiar input
     
-    const vistaPrevia = obtener("vistaPreviaFoto");
-    vistaPrevia.innerHTML = "";
+    // Cargar las fotos acumuladas previamente para este parámetro
+    fotosAcumuladas = resultado ? [...resultado.archivosFotos] : [];
+    obtener("fotoParametro").value = ""; 
 
-    // Si ya existen fotos previas guardadas localmente
-    if (resultado && resultado.archivosFotos && resultado.archivosFotos.length > 0) {
-        resultado.archivosFotos.forEach(file => {
-            const reader = new FileReader();
-            reader.onload = function(evt) {
-                const img = document.createElement("img");
-                img.src = evt.target.result;
-                vistaPrevia.appendChild(img);
-            };
-            reader.readAsDataURL(file);
-        });
-    }
-
+    actualizarVistaPreviaFotos();
     actualizarBotones();
     mostrarTickets();
     ocultarFormularioTicket();
+}
+
+// EVENTO DE SELECCIÓN/CAPTURA DE FOTOS (ACUMULATIVO)
+obtener("fotoParametro").addEventListener("change", function(e) {
+    const nuevosArchivos = Array.from(e.target.files);
+    
+    if (nuevosArchivos.length > 0) {
+        // Agregamos los nuevos archivos al arreglo existente sin borrar los anteriores
+        fotosAcumuladas = fotosAcumuladas.concat(nuevosArchivos);
+        actualizarVistaPreviaFotos();
+    }
+    
+    // Limpiamos la entrada para poder presionar y volver a abrir la cámara cuantas veces se desee
+    this.value = "";
+});
+
+function actualizarVistaPreviaFotos() {
+    const vistaPrevia = obtener("vistaPreviaFoto");
+    vistaPrevia.innerHTML = "";
+
+    fotosAcumuladas.forEach((file, index) => {
+        const contenedor = document.createElement("div");
+        contenedor.className = "item-foto";
+
+        const img = document.createElement("img");
+        const reader = new FileReader();
+        reader.onload = function(evt) { img.src = evt.target.result; };
+        reader.readAsDataURL(file);
+
+        // Botón 'X' para eliminar fotos individualmente
+        const btnEliminar = document.createElement("button");
+        btnEliminar.className = "btn-eliminar-foto";
+        btnEliminar.innerHTML = "✕";
+        btnEliminar.onclick = function() {
+            fotosAcumuladas.splice(index, 1);
+            actualizarVistaPreviaFotos();
+        };
+
+        contenedor.appendChild(img);
+        contenedor.appendChild(btnEliminar);
+        vistaPrevia.appendChild(contenedor);
+    });
 }
 
 function seleccionarEstado(estado) {
@@ -273,45 +305,22 @@ function seleccionarEstado(estado) {
 function guardarDatosParametroActual() {
     const parametro = parametros[indiceParametro];
     const observacion = obtener("observacionParametro").value.trim();
-    const inputFoto = obtener("fotoParametro");
     const existente = inspeccion.resultados.find(r => r.parametroId === parametro.id);
-
-    // Obtener los nuevos archivos seleccionados o mantener los existentes
-    let archivos = inputFoto.files.length > 0 ? Array.from(inputFoto.files) : (existente ? existente.archivosFotos : []);
 
     if (existente) {
         existente.observacion = observacion;
-        existente.archivosFotos = archivos;
+        existente.archivosFotos = [...fotosAcumuladas];
     } else if (estadoActual) {
         inspeccion.resultados.push({ 
             parametroId: parametro.id, 
             parametro: parametro.nombre, 
             estado: estadoActual, 
             observacion, 
-            archivosFotos: archivos,
+            archivosFotos: [...fotosAcumuladas],
             fotos_urls: [] 
         });
     }
 }
-
-// Vista previa de MÚLTIPLES fotos al seleccionarlas
-obtener("fotoParametro").addEventListener("change", function(e) {
-    const archivos = Array.from(e.target.files);
-    const vistaPrevia = obtener("vistaPreviaFoto");
-    vistaPrevia.innerHTML = "";
-
-    if (archivos.length > 0) {
-        archivos.forEach(file => {
-            const reader = new FileReader();
-            reader.onload = function(evt) {
-                const img = document.createElement("img");
-                img.src = evt.target.result;
-                vistaPrevia.appendChild(img);
-            };
-            reader.readAsDataURL(file);
-        });
-    }
-});
 
 function actualizarBotones() {
     obtener("btnCumple").classList.remove("seleccionado");
@@ -401,7 +410,6 @@ function mostrarTickets() {
     });
 }
 
-// Función para subir MÚLTIPLES fotos a Supabase Storage
 async function subirFotosStorage(archivos, inspeccionId, parametroId) {
     if (!archivos || archivos.length === 0) return [];
 
@@ -456,7 +464,6 @@ async function finalizarInspeccion() {
                 parametro_id: r.parametroId,
                 estado: r.estado,
                 observaciones: r.observacion || "",
-                // Las URLs de las fotos se guardan separadas por coma
                 foto_url: urlsFotos.length > 0 ? urlsFotos.join(",") : null
             });
         }
