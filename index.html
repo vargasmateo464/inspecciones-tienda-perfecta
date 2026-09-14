@@ -250,7 +250,7 @@ obtener("fotoParametro").addEventListener("change", function(e) {
         actualizarVistaPreviaFotos();
     }
     
-    // Limpiamos la entrada para poder presionar y volver a abrir la cámara cuantas veces se desee
+    // Limpiamos la entrada para poder presionar y volver a abrir la cámara
     this.value = "";
 });
 
@@ -443,6 +443,7 @@ async function subirFotosStorage(archivos, inspeccionId, parametroId) {
     return urlsSubidas;
 }
 
+// FUNCIÓN CORREGIDA PARA COINCIDIR CON LA TABLA RESULTADOS
 async function finalizarInspeccion() {
     guardarDatosParametroActual();
     const boton = obtener("btnSiguiente");
@@ -460,8 +461,8 @@ async function finalizarInspeccion() {
             }
 
             payloadResultados.push({
-                inspeccion_id: idInspeccion,
-                parametro_id: r.parametroId,
+                id_inspeccion: idInspeccion,  // Nombre exacto de tu columna en Supabase
+                parametro: r.parametro,        // Nombre exacto de tu columna 'parametro' text
                 estado: r.estado,
                 observaciones: r.observacion || "",
                 foto_url: urlsFotos.length > 0 ? urlsFotos.join(",") : null
@@ -479,7 +480,7 @@ async function finalizarInspeccion() {
             const payloadTickets = [];
 
             for (const ticket of inspeccion.tickets) {
-                const resGuardado = resultadosGuardados.find(r => r.parametro_id === ticket.parametroId);
+                const resGuardado = resultadosGuardados.find(r => r.parametro === ticket.parametro);
                 if (resGuardado) {
                     payloadTickets.push({
                         resultado_id: resGuardado.id,
