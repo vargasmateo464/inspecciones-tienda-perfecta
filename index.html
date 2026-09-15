@@ -4,10 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Check List de Inspección de Seguridad</title>
-
 <!-- Cargamos la librería cliente de Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
 * { box-sizing: border-box; }
 body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #f3f4f6; color: #111827; }
@@ -45,108 +43,80 @@ hr { border: 0; border-top: 1px solid #ddd; margin: 20px 0; }
 .btn-eliminar-foto { position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; }
 </style>
 </head>
-
 <body>
-
 <div class="app">
 <header>
     <h1>CHECK LIST DE INSPECCIÓN DE SEGURIDAD</h1>
 </header>
-
 <div class="contenido">
-
 <section id="pantallaInicio">
     <h2>Nueva inspección</h2>
     <label for="fechaInspeccion">Fecha de inspección</label>
     <input type="date" id="fechaInspeccion">
-
     <label for="horaInspeccion">Hora de inspección</label>
     <input type="time" id="horaInspeccion">
-
     <label for="bodega">Bodega</label>
     <input type="text" id="bodega" placeholder="Ingrese la bodega">
-
     <label for="inspector">Nombre del inspector</label>
     <input type="text" id="inspector" placeholder="Ingrese el nombre del inspector">
-
     <label for="regente">Nombre del regente o encargado del área</label>
     <input type="text" id="regente" placeholder="Ingrese el nombre del regente o encargado">
-
     <button type="button" class="btn-principal" id="btnIniciar" style="margin-top:20px;">INICIAR INSPECCIÓN</button>
     <div id="estadoConexion" class="estado-conexion">Conectando con Supabase...</div>
 </section>
-
 <section id="pantallaParametros" class="oculto">
     <div id="contador" class="contador"></div>
     <div id="nombreParametro" class="parametro"></div>
-
     <div class="estados">
         <button type="button" class="estado" id="btnCumple">🟢 CUMPLE</button>
         <button type="button" class="estado" id="btnNoCumple">🔴 NO CUMPLE</button>
         <button type="button" class="estado" id="btnNoAplica">🟡 NO APLICA</button>
     </div>
-
     <label for="observacionParametro">Observación</label>
     <textarea id="observacionParametro" placeholder="Escriba aquí la observación del parámetro"></textarea>
-
     <!-- INPUT DE FOTOS ACUMULATIVO -->
     <label for="fotoParametro">📸 Tomar/Adjuntar Foto (Se irán sumando)</label>
     <input type="file" id="fotoParametro" class="foto-input" accept="image/*" capture="environment" multiple>
     <div id="vistaPreviaFoto" class="previsualizacion-foto"></div>
-
     <button type="button" class="btn-ticket" id="btnAgregarTicket">+ AGREGAR TICKET</button>
     <div id="listaTickets"></div>
-
     <div id="formularioTicket" class="oculto">
         <hr>
         <h3>Nuevo ticket</h3>
         <label for="ticketDescripcion">Descripción</label>
         <textarea id="ticketDescripcion" placeholder="Escriba la descripción del ticket"></textarea>
-
         <label for="ticketNumero">Número de ticket</label>
         <input type="text" id="ticketNumero" placeholder="Ejemplo: STT-36816">
-
         <label for="ticketFecha">Fecha de solicitud</label>
         <input type="date" id="ticketFecha">
-
         <button type="button" class="btn-principal" id="btnGuardarTicket" style="margin-top:15px;">GUARDAR TICKET</button>
         <button type="button" class="btn-secundario" id="btnCancelarTicket" style="margin-top:8px;">CANCELAR</button>
     </div>
-
     <div class="acciones">
         <button type="button" class="btn-secundario" id="btnAnterior">← ANTERIOR</button>
         <button type="button" class="btn-principal" id="btnSiguiente">SIGUIENTE →</button>
     </div>
 </section>
-
 <section id="pantallaFinal" class="oculto">
     <h2>Inspección terminada</h2>
     <div class="mensaje">La inspección y sus fotos fueron guardadas correctamente en Supabase.</div>
     <button type="button" class="btn-principal" id="btnNuevaInspeccion" style="margin-top:20px;">NUEVA INSPECCIÓN</button>
 </section>
-
 </div>
 </div>
-
 <script>
 "use strict";
-
 const SUPABASE_URL = "https://ncnoavdugmmthipnymbq.supabase.co"; 
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5jbm9hdmR1Z21tdGhpcG55bWJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcwODYwNjksImV4cCI6MjEwMjY2MjA2OX0.WAAy6pq7CGncaDOaZdYgi9vn8JwKv8jdVs3glIPUnMc";
-
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
 let parametros = [];
 let indiceParametro = 0;
 let estadoActual = null;
 let idInspeccion = null;
-
 let fotosAcumuladas = [];
-
 let inspeccion = {
     fecha: "", hora: "", bodega: "", inspector: "", regente: "", resultados: [], tickets: []
 };
-
 function obtener(id) { return document.getElementById(id); }
 function fechaHoy() { return new Date().toISOString().split("T")[0]; }
 function horaActual() { return new Date().toTimeString().slice(0, 5); }
@@ -155,11 +125,9 @@ function escaparHTML(texto) {
         .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
-
 obtener("fechaInspeccion").value = fechaHoy();
 obtener("horaInspeccion").value = horaActual();
 obtener("ticketFecha").value = fechaHoy();
-
 async function cargarParametros() {
     const estado = obtener("estadoConexion");
     try {
@@ -168,47 +136,38 @@ async function cargarParametros() {
             .select('id, parametro')
             .eq('activo', true)
             .order('orden', { ascending: true });
-
         if (error) throw error;
         parametros = data.map(item => ({ id: item.id, nombre: item.parametro }));
         if (parametros.length === 0) throw new Error("La tabla parametros no tiene registros activos.");
-
         estado.innerText = "✓ Conectado a Supabase correctamente";
     } catch (error) {
         console.error(error);
         estado.innerText = "❌ Error de conexión con Supabase";
     }
 }
-
 async function iniciarInspeccion() {
     const fecha = obtener("fechaInspeccion").value;
     const hora = obtener("horaInspeccion").value;
     const bodega = obtener("bodega").value.trim();
     const inspector = obtener("inspector").value.trim();
     const regente = obtener("regente").value.trim();
-
     if (!fecha || !hora || !bodega || !inspector || !regente) {
         alert("Por favor complete todos los campos iniciales.");
         return;
     }
-
     const boton = obtener("btnIniciar");
     boton.disabled = true;
     boton.innerText = "GUARDANDO INSPECCIÓN...";
-
     try {
         const { data, error } = await supabaseClient
             .from('inspecciones')
             .insert([{ fecha, hora, bodega, inspector, regente }])
             .select();
-
         if (error) throw error;
-
         idInspeccion = data[0].id;
         inspeccion = { fecha, hora, bodega, inspector, regente, resultados: [], tickets: [] };
         indiceParametro = 0;
         estadoActual = null;
-
         obtener("pantallaInicio").classList.add("oculto");
         obtener("pantallaParametros").classList.remove("oculto");
         mostrarParametro();
@@ -218,26 +177,22 @@ async function iniciarInspeccion() {
         boton.innerText = "INICIAR INSPECCIÓN";
     }
 }
-
 function mostrarParametro() {
     if (parametros.length === 0) return;
     const parametro = parametros[indiceParametro];
     obtener("contador").innerText = `PARÁMETRO ${indiceParametro + 1} DE ${parametros.length}`;
     obtener("nombreParametro").innerText = parametro.nombre;
-
     const resultado = inspeccion.resultados.find(r => r.parametroId === parametro.id);
     estadoActual = resultado ? resultado.estado : null;
     obtener("observacionParametro").value = resultado ? (resultado.observacion || "") : "";
     
     fotosAcumuladas = resultado ? [...(resultado.archivosFotos || [])] : [];
     obtener("fotoParametro").value = ""; 
-
     actualizarVistaPreviaFotos();
     actualizarBotones();
     mostrarTickets();
     ocultarFormularioTicket();
 }
-
 obtener("fotoParametro").addEventListener("change", function(e) {
     const nuevosArchivos = Array.from(e.target.files);
     if (nuevosArchivos.length > 0) {
@@ -246,20 +201,16 @@ obtener("fotoParametro").addEventListener("change", function(e) {
     }
     this.value = "";
 });
-
 function actualizarVistaPreviaFotos() {
     const vistaPrevia = obtener("vistaPreviaFoto");
     vistaPrevia.innerHTML = "";
-
     fotosAcumuladas.forEach((file, index) => {
         const contenedor = document.createElement("div");
         contenedor.className = "item-foto";
-
         const img = document.createElement("img");
         const reader = new FileReader();
         reader.onload = function(evt) { img.src = evt.target.result; };
         reader.readAsDataURL(file);
-
         const btnEliminar = document.createElement("button");
         btnEliminar.className = "btn-eliminar-foto";
         btnEliminar.innerHTML = "✕";
@@ -267,18 +218,15 @@ function actualizarVistaPreviaFotos() {
             fotosAcumuladas.splice(index, 1);
             actualizarVistaPreviaFotos();
         };
-
         contenedor.appendChild(img);
         contenedor.appendChild(btnEliminar);
         vistaPrevia.appendChild(contenedor);
     });
 }
-
 function seleccionarEstado(estado) {
     estadoActual = estado;
     const parametro = parametros[indiceParametro];
     const existente = inspeccion.resultados.find(r => r.parametroId === parametro.id);
-
     if (existente) {
         existente.estado = estado;
         existente.archivosFotos = [...fotosAcumuladas];
@@ -293,12 +241,10 @@ function seleccionarEstado(estado) {
     }
     actualizarBotones();
 }
-
 function guardarDatosParametroActual() {
     const parametro = parametros[indiceParametro];
     const observacion = obtener("observacionParametro").value.trim();
     const existente = inspeccion.resultados.find(r => r.parametroId === parametro.id);
-
     if (existente) {
         existente.observacion = observacion;
         existente.archivosFotos = [...fotosAcumuladas];
@@ -312,24 +258,20 @@ function guardarDatosParametroActual() {
         });
     }
 }
-
 function actualizarBotones() {
     obtener("btnCumple").classList.remove("seleccionado");
     obtener("btnNoCumple").classList.remove("seleccionado");
     obtener("btnNoAplica").classList.remove("seleccionado");
-
     if (estadoActual === "Cumple") obtener("btnCumple").classList.add("seleccionado");
     if (estadoActual === "No Cumple") obtener("btnNoCumple").classList.add("seleccionado");
     if (estadoActual === "No Aplica") obtener("btnNoAplica").classList.add("seleccionado");
 }
-
 async function siguienteParametro() {
     if (!estadoActual) {
         alert("Seleccione el estado del parámetro.");
         return;
     }
     guardarDatosParametroActual();
-
     if (indiceParametro < parametros.length - 1) {
         indiceParametro++;
         mostrarParametro();
@@ -337,7 +279,6 @@ async function siguienteParametro() {
         await finalizarInspeccion();
     }
 }
-
 function anteriorParametro() {
     guardarDatosParametroActual();
     if (indiceParametro > 0) {
@@ -345,50 +286,41 @@ function anteriorParametro() {
         mostrarParametro();
     }
 }
-
 function mostrarFormularioTicket() {
     guardarDatosParametroActual();
     obtener("ticketFecha").value = fechaHoy();
     obtener("formularioTicket").classList.remove("oculto");
 }
-
 function ocultarFormularioTicket() {
     obtener("formularioTicket").classList.add("oculto");
 }
-
 function guardarTicket() {
     const descripcion = obtener("ticketDescripcion").value.trim();
     const numero = obtener("ticketNumero").value.trim();
     const fecha = obtener("ticketFecha").value;
-
     if (!descripcion || !numero || !fecha) {
         alert("Por favor complete todos los datos del ticket.");
         return;
     }
-
     const parametro = parametros[indiceParametro];
     inspeccion.tickets.push({
         parametroId: parametro.id, parametro: parametro.nombre,
         descripcion, numero_ticket: numero, fecha_solicitud: fecha
     });
-
     obtener("ticketDescripcion").value = "";
     obtener("ticketNumero").value = "";
     ocultarFormularioTicket();
     mostrarTickets();
 }
-
 function mostrarTickets() {
     const contenedor = obtener("listaTickets");
     contenedor.innerHTML = "";
     const parametroActual = parametros[indiceParametro];
     const tickets = inspeccion.tickets.filter(t => t.parametroId === parametroActual.id);
-
     if (tickets.length === 0) {
         contenedor.innerHTML = "<p>No hay tickets registrados para este parámetro.</p>";
         return;
     }
-
     tickets.forEach(ticket => {
         const div = document.createElement("div");
         div.className = "ticket";
@@ -400,75 +332,58 @@ function mostrarTickets() {
         contenedor.appendChild(div);
     });
 }
-
 async function subirFotosStorage(archivos, inspeccionId, parametroId) {
     if (!archivos || archivos.length === 0) return [];
-
     const urlsSubidas = [];
-
     for (let i = 0; i < archivos.length; i++) {
         const archivo = archivos[i];
         try {
             const ext = archivo.name.split('.').pop();
             const nombreArchivo = `insp_${inspeccionId}_p${parametroId}_img${i + 1}_${Date.now()}.${ext}`;
             const rutaArchivo = `fotos/${nombreArchivo}`;
-
             const { error } = await supabaseClient
                 .storage
                 .from('fotos-inspecciones')
                 .upload(rutaArchivo, archivo);
-
             if (error) throw error;
-
             const { data: publicUrlData } = supabaseClient
                 .storage
                 .from('fotos-inspecciones')
                 .getPublicUrl(rutaArchivo);
-
             urlsSubidas.push(publicUrlData.publicUrl);
         } catch (err) {
             console.error(`Error al subir foto ${i + 1}:`, err);
         }
     }
-
     return urlsSubidas;
 }
-
 async function finalizarInspeccion() {
     guardarDatosParametroActual();
     const boton = obtener("btnSiguiente");
     boton.disabled = true;
     boton.innerText = "SUBIENDO FOTOS Y DATOS...";
-
     try {
         const payloadResultados = [];
-
         for (const r of inspeccion.resultados) {
             let urlsFotos = [];
-
             if (r.archivosFotos && r.archivosFotos.length > 0) {
                 urlsFotos = await subirFotosStorage(r.archivosFotos, idInspeccion, r.parametroId);
             }
-
+            // CORREGIDO: se envía array (text[]) y se eliminó observaciones porque no existe en la tabla
             payloadResultados.push({
                 id_inspeccion: idInspeccion,
                 parametro: r.parametro,
                 estado: r.estado,
-                observaciones: r.observacion || "",
-                foto_url: urlsFotos.length > 0 ? urlsFotos.join(",") : null
+                foto_url: urlsFotos   // ← array de strings (o [] si no hay fotos)
             });
         }
-
         const { data: resultadosGuardados, error: errorResultados } = await supabaseClient
             .from('resultados')
             .insert(payloadResultados)
             .select();
-
         if (errorResultados) throw errorResultados;
-
         if (inspeccion.tickets.length > 0) {
             const payloadTickets = [];
-
             for (const ticket of inspeccion.tickets) {
                 const resGuardado = resultadosGuardados.find(r => r.parametro === ticket.parametro);
                 if (resGuardado) {
@@ -480,16 +395,13 @@ async function finalizarInspeccion() {
                     });
                 }
             }
-
             if (payloadTickets.length > 0) {
                 const { error: errorTickets } = await supabaseClient
                     .from('tickets')
                     .insert(payloadTickets);
-
                 if (errorTickets) throw errorTickets;
             }
         }
-
         obtener("pantallaParametros").classList.add("oculto");
         obtener("pantallaFinal").classList.remove("oculto");
     } catch (error) {
@@ -498,9 +410,7 @@ async function finalizarInspeccion() {
         boton.innerText = "SIGUIENTE →";
     }
 }
-
 function nuevaInspeccion() { location.reload(); }
-
 obtener("btnIniciar").addEventListener("click", iniciarInspeccion);
 obtener("btnCumple").addEventListener("click", () => seleccionarEstado("Cumple"));
 obtener("btnNoCumple").addEventListener("click", () => seleccionarEstado("No Cumple"));
@@ -511,7 +421,6 @@ obtener("btnAgregarTicket").addEventListener("click", mostrarFormularioTicket);
 obtener("btnGuardarTicket").addEventListener("click", guardarTicket);
 obtener("btnCancelarTicket").addEventListener("click", ocultarFormularioTicket);
 obtener("btnNuevaInspeccion").addEventListener("click", nuevaInspeccion);
-
 (async function() { await cargarParametros(); })();
 </script>
 </body>
