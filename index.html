@@ -132,7 +132,7 @@ hr { border: 0; border-top: 1px solid #ddd; margin: 20px 0; }
 "use strict";
 
 const SUPABASE_URL = "https://ncnoavdugmmthipnymbq.supabase.co"; 
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5jbm9hdmR1Z21tdGhpcG55bWJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcwODYwNjksImV4cCI6MjEwMjY2MjA2OX0.WAAy6pq7CGncaDOaZdYgi9vn8JwKv8jdVs3glIPUnMc"; // <-- Coloca aquí tu clave anon key de Supabase
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5jbm9hdmR1Z21tdGhpcG55bWJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcwODYwNjksImV4cCI6MjEwMjY2MjA2OX0.WAAy6pq7CGncaDOaZdYgi9vn8JwKv8jdVs3glIPUnMc";
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -229,7 +229,7 @@ function mostrarParametro() {
     estadoActual = resultado ? resultado.estado : null;
     obtener("observacionParametro").value = resultado ? (resultado.observacion || "") : "";
     
-    fotosAcumuladas = resultado ? [...resultado.archivosFotos] : [];
+    fotosAcumuladas = resultado ? [...(resultado.archivosFotos || [])] : [];
     obtener("fotoParametro").value = ""; 
 
     actualizarVistaPreviaFotos();
@@ -281,14 +281,14 @@ function seleccionarEstado(estado) {
 
     if (existente) {
         existente.estado = estado;
+        existente.archivosFotos = [...fotosAcumuladas];
     } else {
         inspeccion.resultados.push({ 
             parametroId: parametro.id, 
             parametro: parametro.nombre, 
-            estado, 
-            observacion: "", 
-            archivosFotos: [], 
-            fotos_url: [] 
+            estado: estado, 
+            observacion: obtener("observacionParametro").value.trim(), 
+            archivosFotos: [...fotosAcumuladas]
         });
     }
     actualizarBotones();
@@ -307,9 +307,8 @@ function guardarDatosParametroActual() {
             parametroId: parametro.id, 
             parametro: parametro.nombre, 
             estado: estadoActual, 
-            observacion, 
-            archivosFotos: [...fotosAcumuladas],
-            fotos_url: [] 
+            observacion: observacion, 
+            archivosFotos: [...fotosAcumuladas]
         });
     }
 }
@@ -451,7 +450,6 @@ async function finalizarInspeccion() {
                 urlsFotos = await subirFotosStorage(r.archivosFotos, idInspeccion, r.parametroId);
             }
 
-            // Mapeo exacto según tu estructura de Postgres/Supabase
             payloadResultados.push({
                 id_inspeccion: idInspeccion,
                 parametro: r.parametro,
