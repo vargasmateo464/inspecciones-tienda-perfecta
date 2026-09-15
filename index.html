@@ -343,12 +343,12 @@ async function subirFotosStorage(archivos, inspeccionId, parametroId) {
             const rutaArchivo = `fotos/${nombreArchivo}`;
             const { error } = await supabaseClient
                 .storage
-                .from('fotos-inspecciones')
+                .from('FOTOS-INSPECCIONES')
                 .upload(rutaArchivo, archivo);
             if (error) throw error;
             const { data: publicUrlData } = supabaseClient
                 .storage
-                .from('fotos-inspecciones')
+                .from('FOTOS-INSPECCIONES')
                 .getPublicUrl(rutaArchivo);
             urlsSubidas.push(publicUrlData.publicUrl);
         } catch (err) {
