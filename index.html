@@ -132,7 +132,7 @@ hr { border: 0; border-top: 1px solid #ddd; margin: 20px 0; }
 "use strict";
 
 const SUPABASE_URL = "https://ncnoavdugmmthipnymbq.supabase.co"; 
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5jbm9hdmR1Z21tdGhpcG55bWJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcwODYwNjksImV4cCI6MjEwMjY2MjA2OX0.WAAy6pq7CGncaDOaZdYgi9vn8JwKv8jdVs3glIPUnMc"; 
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5jbm9hdmR1Z21tdGhpcG55bWJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcwODYwNjksImV4cCI6MjEwMjY2MjA2OX0.WAAy6pq7CGncaDOaZdYgi9vn8JwKv8jdVs3glIPUnMc"; // <-- Coloca aquí tu clave anon key de Supabase
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -141,7 +141,6 @@ let indiceParametro = 0;
 let estadoActual = null;
 let idInspeccion = null;
 
-// ARREGLO PARA ACUMULAR FOTOS DEL PARÁMETRO ACTUAL
 let fotosAcumuladas = [];
 
 let inspeccion = {
@@ -230,7 +229,6 @@ function mostrarParametro() {
     estadoActual = resultado ? resultado.estado : null;
     obtener("observacionParametro").value = resultado ? (resultado.observacion || "") : "";
     
-    // Cargar las fotos acumuladas previamente para este parámetro
     fotosAcumuladas = resultado ? [...resultado.archivosFotos] : [];
     obtener("fotoParametro").value = ""; 
 
@@ -240,17 +238,12 @@ function mostrarParametro() {
     ocultarFormularioTicket();
 }
 
-// EVENTO DE SELECCIÓN/CAPTURA DE FOTOS (ACUMULATIVO)
 obtener("fotoParametro").addEventListener("change", function(e) {
     const nuevosArchivos = Array.from(e.target.files);
-    
     if (nuevosArchivos.length > 0) {
-        // Agregamos los nuevos archivos al arreglo existente sin borrar los anteriores
         fotosAcumuladas = fotosAcumuladas.concat(nuevosArchivos);
         actualizarVistaPreviaFotos();
     }
-    
-    // Limpiamos la entrada para poder presionar y volver a abrir la cámara
     this.value = "";
 });
 
@@ -267,7 +260,6 @@ function actualizarVistaPreviaFotos() {
         reader.onload = function(evt) { img.src = evt.target.result; };
         reader.readAsDataURL(file);
 
-        // Botón 'X' para eliminar fotos individualmente
         const btnEliminar = document.createElement("button");
         btnEliminar.className = "btn-eliminar-foto";
         btnEliminar.innerHTML = "✕";
@@ -443,7 +435,6 @@ async function subirFotosStorage(archivos, inspeccionId, parametroId) {
     return urlsSubidas;
 }
 
-// FUNCIÓN CORREGIDA PARA COINCIDIR CON LA TABLA RESULTADOS
 async function finalizarInspeccion() {
     guardarDatosParametroActual();
     const boton = obtener("btnSiguiente");
@@ -460,9 +451,10 @@ async function finalizarInspeccion() {
                 urlsFotos = await subirFotosStorage(r.archivosFotos, idInspeccion, r.parametroId);
             }
 
+            // Mapeo exacto según tu estructura de Postgres/Supabase
             payloadResultados.push({
-                id_inspeccion: idInspeccion,  // Nombre exacto de tu columna en Supabase
-                parametro: r.parametro,        // Nombre exacto de tu columna 'parametro' text
+                id_inspeccion: idInspeccion,
+                parametro: r.parametro,
                 estado: r.estado,
                 observaciones: r.observacion || "",
                 foto_url: urlsFotos.length > 0 ? urlsFotos.join(",") : null
