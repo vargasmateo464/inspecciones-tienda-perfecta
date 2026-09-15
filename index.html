@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Check List de Inspección de Seguridad</title>
-<!-- Cargamos la librería cliente de Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 * { box-sizing: border-box; }
@@ -74,7 +73,6 @@ hr { border: 0; border-top: 1px solid #ddd; margin: 20px 0; }
     </div>
     <label for="observacionParametro">Observación</label>
     <textarea id="observacionParametro" placeholder="Escriba aquí la observación del parámetro"></textarea>
-    <!-- INPUT DE FOTOS ACUMULATIVO -->
     <label for="fotoParametro">📸 Tomar/Adjuntar Foto (Se irán sumando)</label>
     <input type="file" id="fotoParametro" class="foto-input" accept="image/*" capture="environment" multiple>
     <div id="vistaPreviaFoto" class="previsualizacion-foto"></div>
@@ -185,7 +183,6 @@ function mostrarParametro() {
     const resultado = inspeccion.resultados.find(r => r.parametroId === parametro.id);
     estadoActual = resultado ? resultado.estado : null;
     obtener("observacionParametro").value = resultado ? (resultado.observacion || "") : "";
-    
     fotosAcumuladas = resultado ? [...(resultado.archivosFotos || [])] : [];
     obtener("fotoParametro").value = ""; 
     actualizarVistaPreviaFotos();
@@ -338,21 +335,27 @@ async function subirFotosStorage(archivos, inspeccionId, parametroId) {
     for (let i = 0; i < archivos.length; i++) {
         const archivo = archivos[i];
         try {
-            const ext = archivo.name.split('.').pop();
+            const ext = archivo.name.split('.').pop() || 'jpg';
             const nombreArchivo = `insp_${inspeccionId}_p${parametroId}_img${i + 1}_${Date.now()}.${ext}`;
             const rutaArchivo = `fotos/${nombreArchivo}`;
+
+            // Nombre del bucket en MAYÚSCULAS (como aparece en tu dashboard)
             const { error } = await supabaseClient
                 .storage
                 .from('FOTOS-INSPECCIONES')
                 .upload(rutaArchivo, archivo);
+
             if (error) throw error;
+
             const { data: publicUrlData } = supabaseClient
                 .storage
                 .from('FOTOS-INSPECCIONES')
                 .getPublicUrl(rutaArchivo);
+
             urlsSubidas.push(publicUrlData.publicUrl);
         } catch (err) {
             console.error(`Error al subir foto ${i + 1}:`, err);
+            throw err; // para que se vea el error real
         }
     }
     return urlsSubidas;
@@ -369,12 +372,11 @@ async function finalizarInspeccion() {
             if (r.archivosFotos && r.archivosFotos.length > 0) {
                 urlsFotos = await subirFotosStorage(r.archivosFotos, idInspeccion, r.parametroId);
             }
-            // CORREGIDO: se envía array (text[]) y se eliminó observaciones porque no existe en la tabla
             payloadResultados.push({
                 id_inspeccion: idInspeccion,
                 parametro: r.parametro,
                 estado: r.estado,
-                foto_url: urlsFotos   // ← array de strings (o [] si no hay fotos)
+                foto_url: urlsFotos   // array (text[])
             });
         }
         const { data: resultadosGuardados, error: errorResultados } = await supabaseClient
@@ -382,6 +384,7 @@ async function finalizarInspeccion() {
             .insert(payloadResultados)
             .select();
         if (errorResultados) throw errorResultados;
+
         if (inspeccion.tickets.length > 0) {
             const payloadTickets = [];
             for (const ticket of inspeccion.tickets) {
@@ -405,6 +408,7 @@ async function finalizarInspeccion() {
         obtener("pantallaParametros").classList.add("oculto");
         obtener("pantallaFinal").classList.remove("oculto");
     } catch (error) {
+        console.error(error);
         alert("Error al finalizar inspección: " + error.message);
         boton.disabled = false;
         boton.innerText = "SIGUIENTE →";
