@@ -339,23 +339,23 @@ async function subirFotosStorage(archivos, inspeccionId, parametroId) {
             const nombreArchivo = `insp_${inspeccionId}_p${parametroId}_img${i + 1}_${Date.now()}.${ext}`;
             const rutaArchivo = `fotos/${nombreArchivo}`;
 
-            // Nombre del bucket en MAYÚSCULAS (como aparece en tu dashboard)
+            // Nombre correcto del bucket (minúsculas)
             const { error } = await supabaseClient
                 .storage
-                .from('FOTOS-INSPECCIONES')
+                .from('fotos-inspecciones')
                 .upload(rutaArchivo, archivo);
 
             if (error) throw error;
 
             const { data: publicUrlData } = supabaseClient
                 .storage
-                .from('FOTOS-INSPECCIONES')
+                .from('fotos-inspecciones')
                 .getPublicUrl(rutaArchivo);
 
             urlsSubidas.push(publicUrlData.publicUrl);
         } catch (err) {
             console.error(`Error al subir foto ${i + 1}:`, err);
-            throw err; // para que se vea el error real
+            throw err;
         }
     }
     return urlsSubidas;
@@ -376,7 +376,7 @@ async function finalizarInspeccion() {
                 id_inspeccion: idInspeccion,
                 parametro: r.parametro,
                 estado: r.estado,
-                foto_url: urlsFotos   // array (text[])
+                foto_url: urlsFotos
             });
         }
         const { data: resultadosGuardados, error: errorResultados } = await supabaseClient
