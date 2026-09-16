@@ -329,37 +329,29 @@ function mostrarTickets() {
         contenedor.appendChild(div);
     });
 }
+
+// ========== SOLUCIÓN TEMPORAL: fotos en base64 ==========
 async function subirFotosStorage(archivos, inspeccionId, parametroId) {
     if (!archivos || archivos.length === 0) return [];
     const urlsSubidas = [];
     for (let i = 0; i < archivos.length; i++) {
         const archivo = archivos[i];
         try {
-            const ext = archivo.name.split('.').pop() || 'jpg';
-            const nombreArchivo = `insp_${inspeccionId}_p${parametroId}_img${i + 1}_${Date.now()}.${ext}`;
-            const rutaArchivo = `fotos/${nombreArchivo}`;
-
-            // Nombre correcto del bucket (minúsculas)
-            const { error } = await supabaseClient
-                .storage
-                .from('fotos')
-                .upload(rutaArchivo, archivo);
-
-            if (error) throw error;
-
-            const { data: publicUrlData } = supabaseClient
-                .storage
-                .from('fotos')
-                .getPublicUrl(rutaArchivo);
-
-            urlsSubidas.push(publicUrlData.publicUrl);
+            const base64 = await new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(archivo);
+            });
+            urlsSubidas.push(base64);
         } catch (err) {
-            console.error(`Error al subir foto ${i + 1}:`, err);
-            throw err;
+            console.error(`Error al procesar foto ${i + 1}:`, err);
         }
     }
     return urlsSubidas;
 }
+// =======================================================
+
 async function finalizarInspeccion() {
     guardarDatosParametroActual();
     const boton = obtener("btnSiguiente");
@@ -384,7 +376,6 @@ async function finalizarInspeccion() {
             .insert(payloadResultados)
             .select();
         if (errorResultados) throw errorResultados;
-
         if (inspeccion.tickets.length > 0) {
             const payloadTickets = [];
             for (const ticket of inspeccion.tickets) {
