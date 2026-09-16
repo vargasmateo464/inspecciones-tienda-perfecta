@@ -342,14 +342,14 @@ async function subirFotosStorage(archivos, inspeccionId, parametroId) {
             // Nombre correcto del bucket (minúsculas)
             const { error } = await supabaseClient
                 .storage
-                .from('fotos-inspecciones')
+                .from('fotos')
                 .upload(rutaArchivo, archivo);
 
             if (error) throw error;
 
             const { data: publicUrlData } = supabaseClient
                 .storage
-                .from('fotos-inspecciones')
+                .from('fotos')
                 .getPublicUrl(rutaArchivo);
 
             urlsSubidas.push(publicUrlData.publicUrl);
